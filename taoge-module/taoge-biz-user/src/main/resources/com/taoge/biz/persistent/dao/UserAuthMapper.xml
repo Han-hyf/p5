@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.UserAuthMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.UserAuth" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="id_card_front" property="idCardFront" jdbcType="VARCHAR" />
+        <result column="id_card_back" property="idCardBack" jdbcType="VARCHAR" />
+        <result column="id_card_no" property="idCardNo" jdbcType="VARCHAR" />
+        <result column="real_name" property="realName" jdbcType="VARCHAR" />
+        <result column="id_card_front_status" property="idCardFrontStatus" jdbcType="CHAR" />
+        <result column="id_card_back_status" property="idCardBackStatus" jdbcType="CHAR" />
+        <result column="auth_status" property="authStatus" jdbcType="CHAR" />
+        <result column="reason" property="reason" jdbcType="VARCHAR" />
+        <result column="auth_time" property="authTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, user_id, id_card_front, id_card_back, id_card_no, real_name, id_card_front_status, 
+        id_card_back_status, auth_status, reason, auth_time, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.UserAuth" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `user_auth`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="idCardFront != null" >
+                id_card_front,
+            </if>
+            <if test="idCardBack != null" >
+                id_card_back,
+            </if>
+            <if test="idCardNo != null" >
+                id_card_no,
+            </if>
+            <if test="realName != null" >
+                real_name,
+            </if>
+            <if test="idCardFrontStatus != null" >
+                id_card_front_status,
+            </if>
+            <if test="idCardBackStatus != null" >
+                id_card_back_status,
+            </if>
+            <if test="authStatus != null" >
+                auth_status,
+            </if>
+            <if test="reason != null" >
+                reason,
+            </if>
+            <if test="authTime != null" >
+                auth_time,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="idCardFront != null" >
+                #{idCardFront,jdbcType=VARCHAR},
+            </if>
+            <if test="idCardBack != null" >
+                #{idCardBack,jdbcType=VARCHAR},
+            </if>
+            <if test="idCardNo != null" >
+                #{idCardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null" >
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCardFrontStatus != null" >
+                #{idCardFrontStatus,jdbcType=CHAR},
+            </if>
+            <if test="idCardBackStatus != null" >
+                #{idCardBackStatus,jdbcType=CHAR},
+            </if>
+            <if test="authStatus != null" >
+                #{authStatus,jdbcType=CHAR},
+            </if>
+            <if test="reason != null" >
+                #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="authTime != null" >
+                #{authTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.UserAuth" >
+        update `user_auth`
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="idCardFront != null" >
+                id_card_front = #{idCardFront,jdbcType=VARCHAR},
+            </if>
+            <if test="idCardBack != null" >
+                id_card_back = #{idCardBack,jdbcType=VARCHAR},
+            </if>
+            <if test="idCardNo != null" >
+                id_card_no = #{idCardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null" >
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCardFrontStatus != null" >
+                id_card_front_status = #{idCardFrontStatus,jdbcType=CHAR},
+            </if>
+            <if test="idCardBackStatus != null" >
+                id_card_back_status = #{idCardBackStatus,jdbcType=CHAR},
+            </if>
+            <if test="authStatus != null" >
+                auth_status = #{authStatus,jdbcType=CHAR},
+            </if>
+            <if test="reason != null" >
+                reason = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="authTime != null" >
+                auth_time = #{authTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_auth`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `user_auth`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_auth`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

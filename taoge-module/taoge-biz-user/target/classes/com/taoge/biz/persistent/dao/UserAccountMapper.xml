@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.UserAccountMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.UserAccount" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="total_recharge" property="totalRecharge" jdbcType="DECIMAL" />
+        <result column="total_consume" property="totalConsume" jdbcType="DECIMAL" />
+        <result column="balance" property="balance" jdbcType="DECIMAL" />
+        <result column="freeze" property="freeze" jdbcType="DECIMAL" />
+        <result column="total_earn_point" property="totalEarnPoint" jdbcType="INTEGER" />
+        <result column="total_consume_point" property="totalConsumePoint" jdbcType="INTEGER" />
+        <result column="point_balance" property="pointBalance" jdbcType="INTEGER" />
+        <result column="point_freeze" property="pointFreeze" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="BIT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, total_recharge, total_consume, balance, `freeze`, total_earn_point, total_consume_point, 
+        point_balance, point_freeze, `status`, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.UserAccount" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `user_account`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="totalRecharge != null" >
+                total_recharge,
+            </if>
+            <if test="totalConsume != null" >
+                total_consume,
+            </if>
+            <if test="balance != null" >
+                balance,
+            </if>
+            <if test="freeze != null" >
+                `freeze`,
+            </if>
+            <if test="totalEarnPoint != null" >
+                total_earn_point,
+            </if>
+            <if test="totalConsumePoint != null" >
+                total_consume_point,
+            </if>
+            <if test="pointBalance != null" >
+                point_balance,
+            </if>
+            <if test="pointFreeze != null" >
+                point_freeze,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="totalRecharge != null" >
+                #{totalRecharge,jdbcType=DECIMAL},
+            </if>
+            <if test="totalConsume != null" >
+                #{totalConsume,jdbcType=DECIMAL},
+            </if>
+            <if test="balance != null" >
+                #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="freeze != null" >
+                #{freeze,jdbcType=DECIMAL},
+            </if>
+            <if test="totalEarnPoint != null" >
+                #{totalEarnPoint,jdbcType=INTEGER},
+            </if>
+            <if test="totalConsumePoint != null" >
+                #{totalConsumePoint,jdbcType=INTEGER},
+            </if>
+            <if test="pointBalance != null" >
+                #{pointBalance,jdbcType=INTEGER},
+            </if>
+            <if test="pointFreeze != null" >
+                #{pointFreeze,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.UserAccount" >
+        update `user_account`
+        <set >
+            <if test="totalRecharge != null" >
+                total_recharge = #{totalRecharge,jdbcType=DECIMAL},
+            </if>
+            <if test="totalConsume != null" >
+                total_consume = #{totalConsume,jdbcType=DECIMAL},
+            </if>
+            <if test="balance != null" >
+                balance = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="freeze != null" >
+                `freeze` = #{freeze,jdbcType=DECIMAL},
+            </if>
+            <if test="totalEarnPoint != null" >
+                total_earn_point = #{totalEarnPoint,jdbcType=INTEGER},
+            </if>
+            <if test="totalConsumePoint != null" >
+                total_consume_point = #{totalConsumePoint,jdbcType=INTEGER},
+            </if>
+            <if test="pointBalance != null" >
+                point_balance = #{pointBalance,jdbcType=INTEGER},
+            </if>
+            <if test="pointFreeze != null" >
+                point_freeze = #{pointFreeze,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                `status` = #{status,jdbcType=BIT},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_account`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `user_account`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_account`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

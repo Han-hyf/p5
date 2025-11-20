@@ -1,0 +1,90 @@
+<script type="text/x-tmpl" id="globalPageTmpl">
+    <ul class="pagination">
+        <!--if(data.hasPreviousPage){-->
+        <li><a mall-pageNum="<!--=data.prePage-->" href="javascript:void(0);" aria-label="上一页"><span aria-hidden="true">&larr;</span> 上一页</a></li>
+        <!--}else{-->
+        <li class="disabled">
+            <a href="javascript:void(0);" aria-label="上一页"><span aria-hidden="true">&larr;</span> 上一页</a>
+        </li>
+        <!--}-->
+        <!--if (data &&  data.navigatepageNums && data.navigatepageNums.length > 0){ -->
+        <!--for(var i = 0; i < data.navigatepageNums.length; i++){-->
+        <!--if (data.navigatepageNums[i] == data.pageNum){ -->
+            <li class="active" >
+                <a href="javascript:void(0);"><!--=data.navigatepageNums[i]--> <span class="sr-only">(current)</span></a>
+            </li>
+        <!--}else {-->
+            <li>
+                <a mall-pageNum="<!--=data.navigatepageNums[i]-->" href="javascript:void(0);"><!--=data.navigatepageNums[i]--> <span class="sr-only">(current)</span></a>
+            </li>
+        <!--}-->
+
+        <!--} -->
+        <!--} -->
+        <!--if(data.hasNextPage){-->
+        <li><a mall-pageNum="<!--=data.nextPage-->" href="javascript:void(0);" aria-label="下一页">下一页 <span aria-hidden="true">&rarr;</span></a</li>
+        <!--}else{-->
+        <li class="disabled">
+            <a href="javascript:void(0);" aria-label="下一页">下一页 <span aria-hidden="true">&rarr;</span></a>
+        </li>
+        <!--}-->
+        <!--if(data.total){-->
+            <li class="disabled"><a href="javascript:void(0);">总记录数:<!--=data.total--></a></li>
+        <!--}-->
+    </ul>
+</script>
+
+<script type="text/javascript">
+	function getPageStart(pageNum) {
+		return pageNum - 5 > 1 ? pageNum - 5 : 1;
+	}
+
+	function getPageEnd(pageNum, totalPageCount) {
+		return pageNum + 5 < totalPageCount ? pageNum + 5 : totalPageCount;
+	}
+
+	$.fn.pages = function(option) {
+		var _this = $(this);
+		return option ?
+			_this.attr("mall-pageNum", option.pageNum || _this.pageNum() || 1)
+			.attr("mall-pageSize", option.pageSize || _this.pageSize() || 10)
+			.html($.tmpl($("#globalPageTmpl").html(), $.extend({}, option.page))).changePageSize(option.callback).find("a").each(function(i, n){
+				if (option.callback) {
+					if ($(n).attr("mall-pageNum")) {
+						if ($(n).attr("mall-pageNum") == _this.pageNum()) {
+							$(n).attr("class", "pagestrong");
+						}else {
+							$(n).click(function(){
+								_this.pageNum($(this).attr("mall-pageNum"));
+								option.callback();
+							});
+						}
+					}
+				}
+			}) : {
+				pageNum : _this.pageNum(),
+				pageSize : _this.pageSize()
+			};
+	}
+
+	$.fn.pageSize = function(pageSize) {
+		return pageSize ? $(this).attr("mall-pageSize", pageSize || 10 ).attr("mall-pageSize") : $(this).attr("mall-pageSize") || 10;
+	}
+
+	$.fn.pageNum = function(pageNum) {
+		return pageNum ? $(this).attr("mall-pageNum", pageNum || 1).attr("mall-pageNum") : $(this).attr("mall-pageNum") || 1;
+	}
+
+	$.fn.changePageSize = function(callback) {
+		var _this = $(this);
+		_this.find("select").unbind("change").bind("change", function(){
+			_this.pageSize($(this).find("option:selected").val());
+			_this.pageNum(1);
+			if (callback) {
+				callback();
+			}
+		});
+		return _this;
+	}
+
+</script>

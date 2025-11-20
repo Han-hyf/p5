@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.UserInfoMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.UserInfo" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="BIT" />
+        <result column="birthday" property="birthday" jdbcType="DATE" />
+        <result column="interest" property="interest" jdbcType="VARCHAR" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, user_id, nickname, gender, birthday, interest, avatar, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.UserInfo" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `user_info`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="nickname != null" >
+                nickname,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="birthday != null" >
+                birthday,
+            </if>
+            <if test="interest != null" >
+                interest,
+            </if>
+            <if test="avatar != null" >
+                avatar,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="nickname != null" >
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                #{gender,jdbcType=BIT},
+            </if>
+            <if test="birthday != null" >
+                #{birthday,jdbcType=DATE},
+            </if>
+            <if test="interest != null" >
+                #{interest,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null" >
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.UserInfo" >
+        update `user_info`
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="nickname != null" >
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                gender = #{gender,jdbcType=BIT},
+            </if>
+            <if test="birthday != null" >
+                birthday = #{birthday,jdbcType=DATE},
+            </if>
+            <if test="interest != null" >
+                interest = #{interest,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null" >
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateUserInfo">
+        update `user_info`
+        <set >
+            <if test="nickname != null" >
+                nickname = #{nickname},
+            </if>
+            <if test="gender != null" >
+                gender = #{gender},
+            </if>
+            <if test="birthday != null" >
+                birthday = #{birthday},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_info`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `user_info`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_info`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

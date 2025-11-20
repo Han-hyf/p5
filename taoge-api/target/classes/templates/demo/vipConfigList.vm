@@ -1,0 +1,109 @@
+<#assign yqTitle = "会员配置管理">
+<#include "/common/header.vm" />
+
+<style>
+    .img-icon {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 15px;
+    }
+
+    .pic-bottom-box {
+        margin-left: auto;
+        width: 78%;
+    }
+
+    .editForm .align-left {
+        line-height: 36px;
+    }
+
+    .fontColor {
+        color: red;
+    }
+
+    .col-sm-12 {
+        line-height: 40px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row admin-row">
+        <div class="col-md-12">
+            <form id="searchForm" class="form-inline" onSubmit="return false;">
+                <div class="checkbox">
+                    <lable>商品名称：</lable>
+                    <input name="unionName" class="form-control" placeholder="请输入商品名称" type="text" maxlength="50"/>
+                </div>
+                <div class="checkbox">
+                    <button onclick="searchData(1)" type="button" class="btn btn-primary">搜索</button>
+                    <button type="button" onclick="addOrEdit()" class="btn btn-primary">添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row admin-row">
+        <div class="col-md-12 tabWarpAuto">
+            <table id="dataTable" class="table">
+
+            </table>
+        </div>
+    </div>
+    <div id="pageDiv" class="row admin-row">
+    </div>
+</div>
+
+<script type="text/x-tmpl" id="dataTmpl">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>vip名称</th>
+            <th>vip价格</th>
+            <th>vip图标</th>
+            <th>vip时长</th>
+            <th>vip时长名称</th>
+            <th>vip等级</th>
+            <th>状态</th>
+            <th>排序值</th>
+        </tr>
+    </thead>
+    <!--if(data){-->
+    <!--for(var i = 0; i < data.length; i++){-->
+        <tr>
+            <td><!--=data[i].id--></td>
+            <td><!--=data[i].vipName--></td>
+            <td><!--=data[i].vipPrice--></td>
+            <td><!--=data[i].vipIcon--></td>
+            <td><!--=data[i].vipDays--></td>
+            <td><!--=data[i].vipDaysName--></td>
+            <td><!--=data[i].vipLevel--></td>
+            <td><!--=data[i].status--></td>
+            <td><!--=data[i].sort--></td>
+        </tr>
+    <!--}-->
+    <!--}-->
+</script>
+
+<script>
+    $(function () {
+        searchData();
+    });
+
+    //列表数据
+    function searchData(pageNum) {
+        var pageObejct = $("#pageDiv").pages()
+        if (pageNum) {
+            pageObejct.pageNum = pageNum;
+        }
+        ajax("/api/user/vip/list", $.extend($("#searchForm").getFormParam(), pageObejct), function (data) {
+            if (data.code == 200) {
+                if (data.data) {
+                    $("#dataTable").html($.tmpl($("#dataTmpl").html(), data.data));
+                }
+            } else {
+                $.alert(data.msg);
+            }
+        });
+    }
+</script>
+
+<#include "/common/footer.vm">

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${yqTitle}</title>
+
+    <link href="/static/vendors/bundle.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+    <link href="/static/css/common.css" rel="stylesheet">
+
+    <link href="/static/css/jquery.range.css" rel="stylesheet">
+
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/cookie.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/lib.js?20200715"></script>
+    <script src="/static/js/constants.js"></script>
+    <script src="/static/js/jquery.range.js"></script>
+    <script src="/static/js/ajaxfileupload.js"></script>
+    <style>
+        #navA{
+            font-size: 12px;
+            padding: 0px 10px;
+            name-decoration: underline;
+            background:#3a3a3a none repeat scroll 0 0;
+        }
+        #navA:hover{
+            name-decoration: underline;
+            background:#3a3a3a none repeat scroll 0 0;
+            color: #fff;
+        }
+    </style>
+<#include "/common/dialog.vm" />
+    <#include "/common/editor.vm" />
+<#include "/common/page.vm" />
+</head>
+    <body>
+        <script type="name/x-tmpl" id="menuTmpl">
+            <!--if(data.menuList && data.menuList.length > 0){-->
+             <ul>
+                <!--for(var i = 0; i < data.menuList.length; i++){-->
+                    <!--if(data.menuList[i].status == 1){-->
+                        <li class="<!--=data.menuList[i].id == data.currentPid?'open':''-->">
+                        <!--if(data.menuList[i].url){-->
+                            <!--if(data.menuList[i].id ==data.currentId){-->
+                                <a href="<!--=data.menuList[i].url-->" class="active">
+                           <!--}else {-->
+                                <a href="<!--=data.menuList[i].url-->">
+                           <!--}-->
+                           <!--=data.menuList[i].name--></a>
+                        <!--}else {-->
+                            <a href="#"><!--=data.menuList[i].name--></a>
+                        <!--}-->
+                    <!--if(data.menuList[i].children && data.menuList[i].children.length > 0){-->
+                        <ul>
+                            <li>
+                                <!--for(var j = 0; j < data.menuList[i].children.length; j++){-->
+                                    <!--if(data.menuList[i].children[j].id == data.currentId){-->
+                                    <a href="<!--=data.menuList[i].children[j].url-->" class="active">
+                                    <!--}else {-->
+                                    <a href="<!--=data.menuList[i].children[j].url-->">
+                                    <!--}-->
+                                        <!--=data.menuList[i].children[j].name-->
+                                    </a>
+                                <!--}-->
+                            </li>
+                         </ul>
+                        <!--}-->
+                        </li>
+                    <!--}-->
+                <!--}-->
+                 </ul>
+            <!--}-->
+        </script>
+        <script type="name/x-tmpl" id="navTmpl">
+        <!--if(data.navList && data.navList.length > 0){-->
+             <ul>
+            <!--for(var i = 0; i < data.navList.length; i++){-->
+               <li>
+                    <a class="<!--=data.pid == data.navList[i].id ? 'active' : ''-->" data-id="<!--=data.navList[i].resourceId-->" href="<!--=data.navList[i].url-->" data-toggle="tooltip" data-placement="right" title="<!--=data.navList[i].name-->" data-nav-target="#dashboards">
+                     <i class="fa <!--=data.navList[i].icon-->"></i>
+                    </a>
+                </li>
+                <!--}-->
+              </ul>
+        <!--}-->
+        </script>
+        <div class="header" style="display: none"> </div>
+        <div id="main">
+            <div class="navigation">
+                <div class="navigation-menu-tab">
+                    <div>
+                        <div class="navigation-menu-tab-header" data-toggle="tooltip"  data-placement="right">
+                            <a href="#" class="nav-link" data-toggle="dropdown" aria-expanded="false">
+                                <figure class="avatar avatar-sm">
+                                    <img src="/static/media/image/user/logo.png" class="rounded-circle" alt="avatar">
+                                </figure>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 nav" id="nav"> </div>
+                    <div>
+                        <ul>
+                            <li>
+                                <a href="/page/sys/auth/changePwd" data-toggle="tooltip" data-placement="right" title="修改密码">
+                                    <i class="ti-settings"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/logout" data-toggle="tooltip" data-placement="right" title="退出">
+                                    <i class="ti-share-alt"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="navigation-menu-body">
+                    <div>
+                        <div id="navigation-logo">
+                            <span style="font-size: 18px; color:#000">
+                                  直播电商系统
+                            </span>
+                        </div>
+                    </div>
+                    <div class="navigation-menu-group">
+                        <div class="open" id="menu">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="main-content">
+                <div class="page-header" style="display: none;">
+
+                </div>
+                <div class="container-fluid">
+                    <div id="main">
+                        <div class="p-crumb"></div>
+                    </div>
+                </div>

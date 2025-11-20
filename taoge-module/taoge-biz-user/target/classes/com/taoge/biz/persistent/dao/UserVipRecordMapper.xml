@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.UserVipRecordMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.UserVipRecord" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="business_order_sn" property="businessOrderSn" jdbcType="VARCHAR" />
+        <result column="vip_name" property="vipName" jdbcType="VARCHAR" />
+        <result column="vip_price" property="vipPrice" jdbcType="DECIMAL" />
+        <result column="vip_icon" property="vipIcon" jdbcType="VARCHAR" />
+        <result column="vip_days" property="vipDays" jdbcType="INTEGER" />
+        <result column="vip_days_name" property="vipDaysName" jdbcType="VARCHAR" />
+        <result column="vip_level" property="vipLevel" jdbcType="INTEGER" />
+        <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+        <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, user_id, business_order_sn, vip_name, vip_price, vip_icon, vip_days, vip_days_name, 
+        vip_level, pay_amount, pay_date, `status`, remark, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.UserVipRecord" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `user_vip_record`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="businessOrderSn != null" >
+                business_order_sn,
+            </if>
+            <if test="vipName != null" >
+                vip_name,
+            </if>
+            <if test="vipPrice != null" >
+                vip_price,
+            </if>
+            <if test="vipIcon != null" >
+                vip_icon,
+            </if>
+            <if test="vipDays != null" >
+                vip_days,
+            </if>
+            <if test="vipDaysName != null" >
+                vip_days_name,
+            </if>
+            <if test="vipLevel != null" >
+                vip_level,
+            </if>
+            <if test="payAmount != null" >
+                pay_amount,
+            </if>
+            <if test="payDate != null" >
+                pay_date,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+            <if test="remark != null" >
+                remark,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="businessOrderSn != null" >
+                #{businessOrderSn,jdbcType=VARCHAR},
+            </if>
+            <if test="vipName != null" >
+                #{vipName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipPrice != null" >
+                #{vipPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="vipIcon != null" >
+                #{vipIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="vipDays != null" >
+                #{vipDays,jdbcType=INTEGER},
+            </if>
+            <if test="vipDaysName != null" >
+                #{vipDaysName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipLevel != null" >
+                #{vipLevel,jdbcType=INTEGER},
+            </if>
+            <if test="payAmount != null" >
+                #{payAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="payDate != null" >
+                #{payDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="remark != null" >
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.UserVipRecord" >
+        update `user_vip_record`
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="businessOrderSn != null" >
+                business_order_sn = #{businessOrderSn,jdbcType=VARCHAR},
+            </if>
+            <if test="vipName != null" >
+                vip_name = #{vipName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipPrice != null" >
+                vip_price = #{vipPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="vipIcon != null" >
+                vip_icon = #{vipIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="vipDays != null" >
+                vip_days = #{vipDays,jdbcType=INTEGER},
+            </if>
+            <if test="vipDaysName != null" >
+                vip_days_name = #{vipDaysName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipLevel != null" >
+                vip_level = #{vipLevel,jdbcType=INTEGER},
+            </if>
+            <if test="payAmount != null" >
+                pay_amount = #{payAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="payDate != null" >
+                pay_date = #{payDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                `status` = #{status,jdbcType=CHAR},
+            </if>
+            <if test="remark != null" >
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_vip_record`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `user_vip_record`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_vip_record`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <update id="paySuccess">
+        update `user_vip_record`
+        set status = 'PAID'
+        where business_order_sn = #{businessOrderSn}
+        and status = 'INIT'
+    </update>
+
+    <select id="getByBusinessOrderSn" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from `user_vip_record`
+        where business_order_sn = #{businessOrderSn}
+    </select>
+
+</mapper>

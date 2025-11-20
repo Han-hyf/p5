@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.VerifyCodeMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.VerifyCode" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="action_type" property="actionType" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="fail_count" property="failCount" jdbcType="INTEGER" />
+        <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, user_id, mobile, code, action_type, `status`, fail_count, expire_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.VerifyCode" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `verify_code`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="actionType != null" >
+                action_type,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+            <if test="failCount != null" >
+                fail_count,
+            </if>
+            <if test="expireTime != null" >
+                expire_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null" >
+                #{actionType,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="failCount != null" >
+                #{failCount,jdbcType=INTEGER},
+            </if>
+            <if test="expireTime != null" >
+                #{expireTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.VerifyCode" >
+        update `verify_code`
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null" >
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null" >
+                action_type = #{actionType,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                `status` = #{status,jdbcType=CHAR},
+            </if>
+            <if test="failCount != null" >
+                fail_count = #{failCount,jdbcType=INTEGER},
+            </if>
+            <if test="expireTime != null" >
+                expire_time = #{expireTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `verify_code`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `verify_code`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `verify_code`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectValidCode" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from `verify_code`
+        where user_id = #{userId}
+        and mobile = #{mobile}
+        and action_type = #{actionType}
+        and status in ('INIT','WRONG')
+        order by id desc
+        limit 1
+    </select>
+
+    <update id="updateExpireCode" >
+        update `verify_code`
+        set status = 'INVALID'
+        where user_id = #{userId}
+        and mobile = #{mobile}
+        and action_type = #{actionType}
+        and status in ('INIT','WRONG')
+
+    </update>
+</mapper>

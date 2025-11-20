@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.UserVipConfigMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.UserVipConfig" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="vip_name" property="vipName" jdbcType="VARCHAR" />
+        <result column="vip_price" property="vipPrice" jdbcType="DECIMAL" />
+        <result column="vip_icon" property="vipIcon" jdbcType="VARCHAR" />
+        <result column="vip_days" property="vipDays" jdbcType="INTEGER" />
+        <result column="vip_days_name" property="vipDaysName" jdbcType="VARCHAR" />
+        <result column="vip_level" property="vipLevel" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="BIT" />
+        <result column="sort" property="sort" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, vip_name, vip_price, vip_icon, vip_days, vip_days_name, vip_level, `status`, 
+        sort, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.UserVipConfig" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `user_vip_config`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="vipName != null" >
+                vip_name,
+            </if>
+            <if test="vipPrice != null" >
+                vip_price,
+            </if>
+            <if test="vipIcon != null" >
+                vip_icon,
+            </if>
+            <if test="vipDays != null" >
+                vip_days,
+            </if>
+            <if test="vipDaysName != null" >
+                vip_days_name,
+            </if>
+            <if test="vipLevel != null" >
+                vip_level,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+            <if test="sort != null" >
+                sort,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="vipName != null" >
+                #{vipName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipPrice != null" >
+                #{vipPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="vipIcon != null" >
+                #{vipIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="vipDays != null" >
+                #{vipDays,jdbcType=INTEGER},
+            </if>
+            <if test="vipDaysName != null" >
+                #{vipDaysName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipLevel != null" >
+                #{vipLevel,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="sort != null" >
+                #{sort,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.UserVipConfig" >
+        update `user_vip_config`
+        <set >
+            <if test="vipName != null" >
+                vip_name = #{vipName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipPrice != null" >
+                vip_price = #{vipPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="vipIcon != null" >
+                vip_icon = #{vipIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="vipDays != null" >
+                vip_days = #{vipDays,jdbcType=INTEGER},
+            </if>
+            <if test="vipDaysName != null" >
+                vip_days_name = #{vipDaysName,jdbcType=VARCHAR},
+            </if>
+            <if test="vipLevel != null" >
+                vip_level = #{vipLevel,jdbcType=INTEGER},
+            </if>
+            <if test="status != null" >
+                `status` = #{status,jdbcType=BIT},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_vip_config`
+        where 1 = 1
+        <if test="status != null" >
+            `status` = #{status},
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `user_vip_config`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `user_vip_config`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="sort">
+        <foreach collection="ids" item="id" index="index" separator=";">
+            update `user_vip_config`
+            set sort = #{index}
+            where id = #{id}
+        </foreach>
+    </update>
+
+
+</mapper>

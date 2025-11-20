@@ -1,0 +1,9 @@
+com\taoge\biz\persistent\dao\ArticleStatisticsMapper.class
+com\taoge\biz\persistent\entity\ArticleCategory.class
+com\taoge\biz\persistent\service\ArticleService.class
+com\taoge\biz\persistent\entity\Article.class
+com\taoge\biz\persistent\dao\ArticleCategoryMapper.class
+com\taoge\biz\persistent\dao\ArticleMapper.class
+com\taoge\biz\persistent\service\ArticleStatisticsService.class
+com\taoge\biz\persistent\service\ArticleCategoryService.class
+com\taoge\biz\persistent\entity\ArticleStatistics.class

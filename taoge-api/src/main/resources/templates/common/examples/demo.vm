@@ -1,0 +1,312 @@
+<#assign yqTitle = "组件demo">
+<#include "/common/header.vm" />
+<#include "/common/picUpload.vm" />
+<#include "/common/dialog.vm" />
+<script type="text/javascript" src="/static/js/validator.js"></script>
+<style type="text/css">
+	.plugin-menu{}
+	.plugin-list{}
+	.plugin-list .card{
+		width: 800px;
+		border: 1px solid #ddd;
+	}
+	.plugin-list .plugin-list-item{
+		border-top: 1px solid #ddd;
+	    padding: 10px 0;
+	}
+	.plugin-list .plugin-list-item h3{
+		color:#1565C0;
+	}
+	.btn.btn-goto-top{
+		position: fixed;
+		bottom: 20px;
+		right: 35px;
+		width: 30px;
+		height: 30px;
+		background: #1565C0;
+		color: white;
+		text-align: center;
+		line-height: 30px;
+		border-radius: 5px;
+		padding: 0;
+		margin: 0;
+	}
+	.btn.btn-goto-top .glyphicon{
+		margin: 0 auto;
+	}
+</style>
+<div class="container-fluid">
+	<div class="plugin-menu"></div>
+	<hr />
+	<p>
+		UI库：bootstrap3, JS库：jQuery，模板库：Bordash，CSS通用样式：common.css
+	</p>
+	<div class="plugin-list">
+		<div class="plugin-list-item">
+			<h3>js组件库</h3>
+			<div>
+				<p>
+					包含的常用功能：日期选择，cookie操作，location.search操作，数据交互，数字计算，模板渲染，数据格式化等等。<b>具体功能见源码注释</b>。
+				</p>
+				<p>
+					<b>点击下面链接直通源码</b>
+				</p>
+				<p><a class="btn" href="/static/js/common.js" target="_blank">common.js</a>
+				<a class="btn" href="/static/js/lib.js" target="_blank">lib.js</a></p>
+			</div>
+		</div>
+
+		<div class="plugin-list-item">
+			<h3>dialog</h3>
+			<div>
+				<p>
+					<button class="btn btn-primary" onclick="$.alert('这是警示窗！')">$.alert</button>
+					<button class="btn btn-primary btn-test-confirm">$.confirm</button>
+					<button class="btn btn-primary btn-test-dialog-read">$.dialog只读</button>
+					<button class="btn btn-primary btn-test-dialog-edit">$.dialog编辑</button>
+				</p>
+			</div>
+		</div>
+
+		<div class="plugin-list-item">
+			<h3>下拉列表select</h3>
+			<div>
+				<h5>多选下拉列表
+				 <a href="http://davidstutz.de/bootstrap-multiselect/" target="_blank">文档</a>
+				</h5>
+				<p data-label="CODE EXAMPLE" class="demo-code-preview">
+					$().multiselect({})
+				</p>
+			</div>
+			<div>
+				<h5>单选select，带搜索框
+					<a href="https://harvesthq.github.io/chosen/#multiple-select" target="_blank">文档</a>
+					<a href="https://github.com/harvesthq/chosen" target="_blank">github</a>
+				</h5>
+				<p data-label="CODE EXAMPLE" class="demo-code-preview">
+					$().chosen({})
+				</p>
+			</div>
+		</div>
+
+		<div class="plugin-list-item">
+			<h3>steps步骤</h3>
+			<div>
+				<p>
+					步骤控制组件，<a href="https://github.com/rstaib/jquery-steps" target="_blank">github</a>
+				</p>
+				<p data-label="CODE EXAMPLE" class="demo-code-preview">
+					$().steps({})
+				</p>
+			</div>
+		</div>
+
+		<div class="plugin-list-item">
+			<h3>form表单</h3>
+			<div>
+				<p>
+					html和css结构
+				</p>
+				<div class="card">
+					<div class="card-body">
+						<form data-toggle="validator" role="form">
+							<div class="clearfix form-group required height-auto">
+								<label class="left control-label" >姓名：</label>             
+								<div class="left form-control">
+									<input placeholder="请输入姓名" required="" name="name" maxlength="30" value="" type="text" class="form-control">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="clearfix form-group height-auto">
+								<label class="left control-label">性别：</label>             
+								<div class="left form-control">
+									<div class="left custom-control custom-radio">
+								        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked>
+								        <label class="custom-control-label" for="customRadio1">女</label>
+								    </div>
+							    	<div class="left custom-control custom-radio">
+							            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+							            <label class="custom-control-label" for="customRadio2">男</label>
+							        </div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label">年龄：</label>             
+								<div class="form-control">静态显示</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label">日期全：</label>             
+								<input id="pickDate" name="startDate1" maxlength="30" value="" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label class="control-label">日期没时间：</label>             
+								<input id="pickDate1" name="startDate2" maxlength="30" value="" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label class="control-label">日期没秒：</label>             
+								<input id="pickDate2" name="startDate3" maxlength="30" value="" type="text" class="form-control">
+							</div>
+							<div class="row form-group">
+								<label class="col-md-4 control-label">上传头像-单图：</label>             
+								<div id="uploadAvatar" class="col-md-8 form-control" style="height:auto;"></div>
+							</div>
+							<div class="row form-group">
+								<label class="col-md-4 control-label">上传多图：</label>             
+								<div id="uploadImgs" class="col-md-8 form-control" style="height:auto;"></div>
+							</div>
+							<div class="btns">
+								<button class="btn btn-primary btn-save">
+									 <i class="glyphicon glyphicon-floppy-save"></i>
+									保存
+								</button>
+								<button class="btn btn-primary">
+									 <i class="glyphicon glyphicon-edit"></i>
+									编辑
+								</button>
+								<button class="btn btn-primary">
+									 <i class="glyphicon glyphicon-file"></i>
+									查看
+								</button>
+								<button class="btn btn-primary">
+									 <i class="glyphicon glyphicon-chevron-left"></i>
+									返回
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="plugin-list-item">
+			<h3>表单验证</h3>
+			<p>
+				可参考表单示例，下面是组件源码，点击直达
+			</p>
+			<div>
+				<a href="/static/js/validator.js" target="_blank" class="btn">validator.js</a>
+				<a class="btn">/common/validateUtils.vm【按路径查看源码】</a>
+			</div>
+		</div>
+
+		<div class="plugin-list-item">
+			<h3>图片放大-相册</h3>
+			<div>
+				模板文件夹，/Bordash/lightbox.html
+			</div>
+		</div>
+	</div>
+</div>
+<a class="btn btn-goto-top" href="#top">
+	<span class="glyphicon glyphicon-arrow-up"></span>
+</a>
+<script type="text/x-tmpl" id="tmpl-menu-a">
+	<!-- if(data.length){ -->
+	<!-- for(var i=0;i<data.length;i++){ -->
+			<a class="btn btn-outline-primary" href="#<!--=data[i].id-->"><!--=data[i].title--></a>
+	<!-- } -->
+	<!-- } -->
+</script>
+<script type="text/javascript">
+$(function(){
+	var menu = {
+		idPrefix:'plugin-menu-',
+		getId:function(index){
+			return this.idPrefix + index;
+		}
+	}
+	function initUploadImage(id){
+		$('#'+id).imgUpload({
+			isSingle: true,//是否单图
+			isread:false,//是否只读
+			accept:"image/jpeg",
+			tip:'只支持jpg图片格式，1:1比例，不超过2m',
+			onChange:function(urls){
+				console.log({urls})
+			}//上传回调
+		})
+	}
+	function initDatepicker(id,tmpl,options){
+		$.tools.datePicker($('#'+id),tmpl,options || {})
+	}
+	function init(){
+		$.setCurrentMenuName('组件demo')
+		// 配置菜单
+		var menuData = [];
+		$('.plugin-list .plugin-list-item').each(function(index,item){
+			var ele = $(item);
+			var title = ele.find('h3').text();
+			var id = menu.getId(index);
+			ele.attr('id',id);
+			menuData.push({
+				title:title,
+				id:id
+			})
+		})
+		// 回到顶部
+		$('.btn-goto-top').click(function(){
+			window.location.href = '/page/common/examples/demo?#plugin-menu-0'
+		})
+		// 渲染菜单
+		$('.plugin-menu').html( $.tmpl( $("#tmpl-menu-a").html(),menuData ) );
+		initUploadImage('uploadAvatar');
+		// 多图上传
+		$('#uploadImgs').imgUpload({
+			isSingle: false,//是否单图
+			isread:false,//是否只读
+			onChange:function(urls){
+				console.log('多图',urls)
+			}//上传回调
+		})
+		initDatepicker('pickDate',{});
+		initDatepicker('pickDate1',{type:1});
+		initDatepicker('pickDate2',{type:2});
+		// 表单验证
+		$('form').validator({
+		    custom:{
+		        // 自定义验证方法
+		    }
+		})
+		// dialog
+		$(".btn-test-confirm").click(function(){
+			$.confirm('这是确认窗',{callback:1},function(data){
+				$.alert('选择了确定')
+			},{
+				title:'确认提示标题在这里',
+				confirmButton:"是的"
+			})
+		})
+		$(".btn-test-dialog-read").click(function(){
+			$.dialog("<div>查看一些信息</div>",{
+				title:'查看标题呀',
+				cancelButton:'关闭'
+			});
+		})
+		$(".btn-test-dialog-edit").click(function(){
+			$.dialog("<form>表单项，适用于创建/编辑</form>",{
+				isEdit:1,
+				confirmButton:'编辑',
+				title:'编辑产品',
+				onSubmit:function(){
+					$.alert('请输入姓名');
+					return false;
+				}
+			})
+		})
+		 
+		// 保存按钮
+		$('.btn-save').click(function(){
+			$('form').validator('validate');
+			var r = $('form').data('bs.validator').validate().hasErrors();
+			if(r){
+			    //有错误
+			    return false;
+			}
+			console.log('保存',$('form').getFormParam());
+		})
+	}
+	//------------------------------------------------------------ 初始化
+	init();
+})
+</script>
+<#include "/common/footer.vm">

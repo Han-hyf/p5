@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3307/doc_demo?useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL&rewriteBatchedStatements=true&useAffectedRows=true&allowMultiQueries=true"
+    username: "root"
+    password: "123456"
+    driver-class-name: "com.mysql.jdbc.Driver"
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      poolName: "hikariCP"
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 300000
+      connection-timeout: 1000
+      max-lifetime: 1800000
+  freemarker:
+    template-loader-path: [ "classpath:/templates/" ] # 设置ftl文件路径
+    cache: false  # 设置页面缓存
+    charset: "UTF-8" # 设置页面编码格式
+    check-template-location: true
+    content-type: "text/html" # 设置文档类型
+    expose-request-attributes: false
+    expose-session-attributes: false
+    request-context-attribute: "request" #可以让Freemarker获取项目根路经
+    suffix: ".vm" # 设置模板后
+logging:
+  level:
+    com.taoge.biz.persistent.dao.*: debug

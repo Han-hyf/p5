@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.SmsRecordMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.SmsRecord" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+        <result column="mobile_prefix" property="mobilePrefix" jdbcType="VARCHAR" />
+        <result column="iso" property="iso" jdbcType="VARCHAR" />
+        <result column="original_mobile" property="originalMobile" jdbcType="VARCHAR" />
+        <result column="action_type" property="actionType" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="template_code" property="templateCode" jdbcType="VARCHAR" />
+        <result column="template_param" property="templateParam" jdbcType="VARCHAR" />
+        <result column="ip" property="ip" jdbcType="VARCHAR" />
+        <result column="send_status" property="sendStatus" jdbcType="BIT" />
+        <result column="send_message" property="sendMessage" jdbcType="VARCHAR" />
+        <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+        <result column="send_day" property="sendDay" jdbcType="DATE" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, user_id, mobile, mobile_prefix, iso, original_mobile, action_type, content, template_code, 
+        template_param, ip, send_status, send_message, send_time, send_day, create_time, 
+        update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.SmsRecord" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `sms_record`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="mobile != null" >
+                mobile,
+            </if>
+            <if test="mobilePrefix != null" >
+                mobile_prefix,
+            </if>
+            <if test="iso != null" >
+                iso,
+            </if>
+            <if test="originalMobile != null" >
+                original_mobile,
+            </if>
+            <if test="actionType != null" >
+                action_type,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="templateCode != null" >
+                template_code,
+            </if>
+            <if test="templateParam != null" >
+                template_param,
+            </if>
+            <if test="ip != null" >
+                ip,
+            </if>
+            <if test="sendStatus != null" >
+                send_status,
+            </if>
+            <if test="sendMessage != null" >
+                send_message,
+            </if>
+            <if test="sendTime != null" >
+                send_time,
+            </if>
+            <if test="sendDay != null" >
+                send_day,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="mobile != null" >
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilePrefix != null" >
+                #{mobilePrefix,jdbcType=VARCHAR},
+            </if>
+            <if test="iso != null" >
+                #{iso,jdbcType=VARCHAR},
+            </if>
+            <if test="originalMobile != null" >
+                #{originalMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null" >
+                #{actionType,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="templateCode != null" >
+                #{templateCode,jdbcType=VARCHAR},
+            </if>
+            <if test="templateParam != null" >
+                #{templateParam,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null" >
+                #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="sendStatus != null" >
+                #{sendStatus,jdbcType=BIT},
+            </if>
+            <if test="sendMessage != null" >
+                #{sendMessage,jdbcType=VARCHAR},
+            </if>
+            <if test="sendTime != null" >
+                #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sendDay != null" >
+                #{sendDay,jdbcType=DATE},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.SmsRecord" >
+        update `sms_record`
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="mobile != null" >
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="mobilePrefix != null" >
+                mobile_prefix = #{mobilePrefix,jdbcType=VARCHAR},
+            </if>
+            <if test="iso != null" >
+                iso = #{iso,jdbcType=VARCHAR},
+            </if>
+            <if test="originalMobile != null" >
+                original_mobile = #{originalMobile,jdbcType=VARCHAR},
+            </if>
+            <if test="actionType != null" >
+                action_type = #{actionType,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="templateCode != null" >
+                template_code = #{templateCode,jdbcType=VARCHAR},
+            </if>
+            <if test="templateParam != null" >
+                template_param = #{templateParam,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null" >
+                ip = #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="sendStatus != null" >
+                send_status = #{sendStatus,jdbcType=BIT},
+            </if>
+            <if test="sendMessage != null" >
+                send_message = #{sendMessage,jdbcType=VARCHAR},
+            </if>
+            <if test="sendTime != null" >
+                send_time = #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sendDay != null" >
+                send_day = #{sendDay,jdbcType=DATE},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `sms_record`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `sms_record`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `sms_record`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+
+    <select id="countByMobileInDay" resultType="java.lang.Long" >
+        select count(*)
+        from `sms_record`
+        where user_id = #{userId}
+        and mobile = #{mobile}
+        and action_type = #{actionType}
+        and send_day = current_date()
+    </select>
+
+</mapper>

@@ -1,0 +1,6 @@
+com\taoge\biz\mq\enums\MqBusinessTypeEnum.class
+com\taoge\biz\mq\enums\MqExchangeEnum.class
+com\taoge\biz\mq\msg\BaseMqMsg.class
+com\taoge\Main.class
+com\taoge\biz\mq\msg\SyncArticleStatisticsBrowsePv.class
+com\taoge\biz\mq\service\RabbitMqProducer.class

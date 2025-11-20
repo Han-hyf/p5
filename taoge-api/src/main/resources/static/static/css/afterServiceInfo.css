@@ -1,0 +1,82 @@
+.order-header{
+    border-bottom:2px solid #ccc; padding:10px;
+    height: 45px;
+}
+.order-header>label{float: left; font-weight: bold;}
+.order-header>span+label{ margin-left:30px;}
+.order-header>span{ min-width:50px; text-align: left;padding-left:15px; float: left}
+.orderSuccess-header h4{
+    font-size:16px ;
+}
+.orderSuccess-header{padding-left:15px;}
+ul.timeline {
+    list-style-type: none; position: relative;
+}
+ul.timeline:before {
+    content: ' ';background: #d4d9df;display: inline-block; position: absolute;
+    left: 29px;width: 2px; height: 100%;    z-index: 400;
+}
+ul.timeline > li {
+    margin: 20px 0; padding-left: 60px;
+}
+ul.timeline > li:before {
+    content: ' ';background: white;
+    display: inline-block; position: absolute;
+    border-radius: 50%; border: 3px solid #22c0e8;left: 20px;
+    width: 20px; height: 20px;z-index: 400;
+}
+.avatar-xl{float: left;margin-bottom: 15px;}
+.avatar-xl>img{
+    width:200px;height: 160px; border: 1px solid #f8f8f8; display: block; margin: 0 auto;
+}
+.flowTitle{ background-color: #ededed;line-height: 30px;padding-left: 15px;}
+#afterMerchandise h4{
+    font-size: 18px; border-bottom: 1px solid #ededed;
+    padding-bottom: 10px;
+    background: #f8f8f8; line-height: 32px;
+    height: 32px;  padding-left: 10px;
+    margin-bottom: 15px;
+}
+#c-afterMerchandise{
+    margin-bottom: 15px; overflow: hidden;
+}
+#consultCard h4{
+    font-size: 16px;background: #ededed;margin-left:-15px;margin-right:-15px;
+    line-height: 32px; padding-left: 15px;margin-top:0;
+}
+#afterMerchandise label{
+    min-width:80px;
+    text-align: right;
+    padding-right: 5px;
+}
+.recordLi{
+    padding-top: 10px;
+}
+.recordLi+div{
+    border-top: 1px solid #ddd;
+}
+.receipt-footer{
+    padding-bottom:30px;
+} #productSearch_chosen{
+      border-radius: 5px;
+  }
+#productSearch{
+    width: 315px;
+    height: 34px;
+    border-radius: 5px;
+    border-color: #eee;
+}
+#defaultAddress{
+    margin-top: 20px;
+    padding: 10px 5px 5px;
+    background: #efefef;
+}
+.c-person>img{
+    width:140px;
+    border:1px solid #ddd;
+    margin-left: 10px;
+}
+.orderSuccess-header>p>label{
+    color: red;
+    padding: 0 5px;
+}

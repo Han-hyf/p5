@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${yqTitle}</title>
+##    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/app.css" rel="stylesheet">
+    <link href="/static/css/common.css" rel="stylesheet">
+    <link href="/static/css/jquery.range.css" rel="stylesheet">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/cookie.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/lib.js"></script>
+    <script src="/static/js/jquery.range.js"></script>
+    <script src="/static/js/constants.js"></script>
+    <script src="/static/js/ajaxfileupload.js"></script>
+    <script>
+    </script>
+    <style>
+        #navA{
+            font-size: 12px;
+            padding: 0px 10px;
+            name-decoration: underline;
+            background:#3a3a3a none repeat scroll 0 0;
+        }
+        #navA:hover{
+            name-decoration: underline;
+            background:#3a3a3a none repeat scroll 0 0;
+            color: #fff;
+        }
+    </style>
+<#include "/common/dialog.vm" />
+<#include "/common/page.vm" />
+</head>
+    <body>
+        <script type="name/x-tmpl" id="menuTmpl">
+            <div class="place"></div>
+            <!--if(data.menuList && data.menuList.length > 0){-->
+                <!--for(var i = 0; i < data.menuList.length; i++){-->
+                    <!--if(data.menuList[i].status == 1){-->
+                    <dl>
+                    <dt>
+                        <!--if(data.menuList[i].url){-->
+                            <i class="glyphicon glyphicon-tasks"></i><a href="<!--=data.menuList[i].url-->" style="color: #fff;"><!--=data.menuList[i].name--></a>
+                        <!--}else {-->
+                            <i class="glyphicon glyphicon-tasks"></i><!--=data.menuList[i].name-->
+                        <!--}-->
+                    </dt>
+                        <!--if(data.menuList[i].children && data.menuList[i].children.length > 0){-->
+                        <dd>
+                            <!--for(var j = 0; j < data.menuList[i].children.length; j++){-->
+                                <!--if(data.menuList[i].children[j].id == data.currentId){-->
+                                <a href="<!--=data.menuList[i].children[j].url-->" class="current">
+                                <!--}else {-->
+                                <a href="<!--=data.menuList[i].children[j].url-->">
+                                <!--}-->
+                                    <i class="glyphicon glyphicon-option-horizontal"></i>
+                                    <i class="glyphicon glyphicon-menu-right right"></i>
+                                    <!--=data.menuList[i].children[j].name-->
+                                </a>
+                            <!--}-->
+                        </dd>
+                        <!--}-->
+                    </dl>
+                    <!--}-->
+                <!--}-->
+            <!--}-->
+        </script>
+        <script type="name/x-tmpl" id="navTmpl">
+            <!--if(data && data.length > 0){-->
+            <!--for(var i = 0; i < data.length; i++){-->
+                <a data-id="<!--=data[i].resourceId-->" href="<!--=data[i].url-->"><!--=data[i].name--></a>
+            <!--}-->
+            <!--}-->
+        </script>
+    <div id="body">
+        <div id="navigation">
+            <div id="logo">云秦直播管理平台</div>
+            <div class="nav">
+                <a id="navModifyPwd" style="font-size: 11px; padding: 0px 10px;" href="/page/sys/auth/changePwd">修改密码</a>
+                <a id="navLogout" style="font-size: 11px; padding: 0px 10px;" href="/logout"><i class="glyphicon glyphicon-off"> </i>退出</a>
+            </div>
+            <div id="nav" class="nav">
+            </div>
+        </div>
+        <div id="menu">
+
+        </div>
+        <div id="main">
+            <div class="p-crumb"></div>
+        </div>
+    </div>

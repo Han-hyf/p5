@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.ArticleMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.Article" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="category_1_id" property="category1Id" jdbcType="BIGINT" />
+        <result column="category_2_id" property="category2Id" jdbcType="BIGINT" />
+        <result column="category_3_id" property="category3Id" jdbcType="BIGINT" />
+        <result column="category_4_id" property="category4Id" jdbcType="BIGINT" />
+        <result column="cover" property="cover" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+        <result column="author_id" property="authorId" jdbcType="BIGINT" />
+        <result column="author_name" property="authorName" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="ResultMapWithBLOBs" type="com.taoge.biz.persistent.entity.Article" extends="BaseResultMap" >
+        <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, category_1_id, category_2_id, category_3_id, category_4_id, cover, title, sub_title, 
+        publish_time, author_id, author_name, `status`, create_time, update_time
+    </sql>
+
+    <sql id="Blob_Column_List" >
+        content
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.Article" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `article`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="category1Id != null" >
+                category_1_id,
+            </if>
+            <if test="category2Id != null" >
+                category_2_id,
+            </if>
+            <if test="category3Id != null" >
+                category_3_id,
+            </if>
+            <if test="category4Id != null" >
+                category_4_id,
+            </if>
+            <if test="cover != null" >
+                cover,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="subTitle != null" >
+                sub_title,
+            </if>
+            <if test="publishTime != null" >
+                publish_time,
+            </if>
+            <if test="authorId != null" >
+                author_id,
+            </if>
+            <if test="authorName != null" >
+                author_name,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="category1Id != null" >
+                #{category1Id,jdbcType=BIGINT},
+            </if>
+            <if test="category2Id != null" >
+                #{category2Id,jdbcType=BIGINT},
+            </if>
+            <if test="category3Id != null" >
+                #{category3Id,jdbcType=BIGINT},
+            </if>
+            <if test="category4Id != null" >
+                #{category4Id,jdbcType=BIGINT},
+            </if>
+            <if test="cover != null" >
+                #{cover,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subTitle != null" >
+                #{subTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null" >
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="authorId != null" >
+                #{authorId,jdbcType=BIGINT},
+            </if>
+            <if test="authorName != null" >
+                #{authorName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.Article" >
+        update `article`
+        <set >
+            <if test="category1Id != null" >
+                category_1_id = #{category1Id,jdbcType=BIGINT},
+            </if>
+            <if test="category2Id != null" >
+                category_2_id = #{category2Id,jdbcType=BIGINT},
+            </if>
+            <if test="category3Id != null" >
+                category_3_id = #{category3Id,jdbcType=BIGINT},
+            </if>
+            <if test="category4Id != null" >
+                category_4_id = #{category4Id,jdbcType=BIGINT},
+            </if>
+            <if test="cover != null" >
+                cover = #{cover,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="subTitle != null" >
+                sub_title = #{subTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null" >
+                publish_time = #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="authorId != null" >
+                author_id = #{authorId,jdbcType=BIGINT},
+            </if>
+            <if test="authorName != null" >
+                author_name = #{authorName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                `status` = #{status,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="list" resultMap="ResultMapWithBLOBs" >
+        select 
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from `article`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `article`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="ResultMapWithBLOBs" >
+        select 
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from `article`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="publish">
+        update `article`
+        set status = 'PUBLISH',publish_time = current_time()
+        where id = #{id} and status != 'PUBLISH'
+    </update>
+
+    <update id="offline">
+        update `article`
+        set status = 'OFF_LINE'
+        where id = #{id}
+    </update>
+</mapper>

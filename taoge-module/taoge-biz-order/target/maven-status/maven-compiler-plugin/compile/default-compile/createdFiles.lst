@@ -1,0 +1,6 @@
+com\taoge\biz\persistent\dao\OrderMapper.class
+com\taoge\biz\persistent\dao\BusinessOrderMapper.class
+com\taoge\biz\persistent\entity\Order.class
+com\taoge\biz\persistent\service\BusinessOrderService.class
+com\taoge\biz\persistent\entity\BusinessOrder.class
+com\taoge\biz\persistent\service\OrderService.class

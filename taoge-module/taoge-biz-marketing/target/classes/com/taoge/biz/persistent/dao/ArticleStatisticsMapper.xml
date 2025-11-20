@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.ArticleStatisticsMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.ArticleStatistics" >
+        <id column="article_id" property="articleId" jdbcType="BIGINT" />
+        <result column="browse_pv" property="browsePv" jdbcType="BIGINT" />
+        <result column="browse_uv" property="browseUv" jdbcType="BIGINT" />
+        <result column="comment_pv" property="commentPv" jdbcType="BIGINT" />
+        <result column="comment_uv" property="commentUv" jdbcType="BIGINT" />
+        <result column="favorite" property="favorite" jdbcType="BIGINT" />
+        <result column="like" property="like" jdbcType="BIGINT" />
+        <result column="share_pv" property="sharePv" jdbcType="BIGINT" />
+        <result column="share_uv" property="shareUv" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        article_id, browse_pv, browse_uv, comment_pv, comment_uv, favorite, `like`, share_pv, 
+        share_uv, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.ArticleStatistics" >
+        insert into `article_statistics`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="articleId != null" >
+                article_id,
+            </if>
+            <if test="browsePv != null" >
+                browse_pv,
+            </if>
+            <if test="browseUv != null" >
+                browse_uv,
+            </if>
+            <if test="commentPv != null" >
+                comment_pv,
+            </if>
+            <if test="commentUv != null" >
+                comment_uv,
+            </if>
+            <if test="favorite != null" >
+                favorite,
+            </if>
+            <if test="like != null" >
+                `like`,
+            </if>
+            <if test="sharePv != null" >
+                share_pv,
+            </if>
+            <if test="shareUv != null" >
+                share_uv,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="articleId != null" >
+                #{articleId,jdbcType=BIGINT},
+            </if>
+            <if test="browsePv != null" >
+                #{browsePv,jdbcType=BIGINT},
+            </if>
+            <if test="browseUv != null" >
+                #{browseUv,jdbcType=BIGINT},
+            </if>
+            <if test="commentPv != null" >
+                #{commentPv,jdbcType=BIGINT},
+            </if>
+            <if test="commentUv != null" >
+                #{commentUv,jdbcType=BIGINT},
+            </if>
+            <if test="favorite != null" >
+                #{favorite,jdbcType=BIGINT},
+            </if>
+            <if test="like != null" >
+                #{like,jdbcType=BIGINT},
+            </if>
+            <if test="sharePv != null" >
+                #{sharePv,jdbcType=BIGINT},
+            </if>
+            <if test="shareUv != null" >
+                #{shareUv,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.ArticleStatistics" >
+        update `article_statistics`
+        <set >
+            <if test="browsePv != null" >
+                browse_pv = #{browsePv,jdbcType=BIGINT},
+            </if>
+            <if test="browseUv != null" >
+                browse_uv = #{browseUv,jdbcType=BIGINT},
+            </if>
+            <if test="commentPv != null" >
+                comment_pv = #{commentPv,jdbcType=BIGINT},
+            </if>
+            <if test="commentUv != null" >
+                comment_uv = #{commentUv,jdbcType=BIGINT},
+            </if>
+            <if test="favorite != null" >
+                favorite = #{favorite,jdbcType=BIGINT},
+            </if>
+            <if test="like != null" >
+                `like` = #{like,jdbcType=BIGINT},
+            </if>
+            <if test="sharePv != null" >
+                share_pv = #{sharePv,jdbcType=BIGINT},
+            </if>
+            <if test="shareUv != null" >
+                share_uv = #{shareUv,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where article_id = #{articleId,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `article_statistics`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `article_statistics`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `article_statistics`
+        where article_id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="addBrowsePv">
+        update `article_statistics`
+        set browse_pv = browse_pv + #{browsePv}
+        where article_id = #{articleId}
+    </update>
+
+    <update id="updateBrowseUv">
+        update `article_statistics`
+        set browse_uv =  #{browseUv}
+        where article_id = #{articleId}
+    </update>
+</mapper>

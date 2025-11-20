@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.BusinessOrderMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.BusinessOrder" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="business_order_sn" property="businessOrderSn" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="sign_key" property="signKey" jdbcType="VARCHAR" />
+        <result column="total_money" property="totalMoney" jdbcType="DECIMAL" />
+        <result column="pay_money" property="payMoney" jdbcType="DECIMAL" />
+        <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+        <result column="business_type" property="businessType" jdbcType="VARCHAR" />
+        <result column="business_param" property="businessParam" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+        <result column="pay_expire_time" property="payExpireTime" jdbcType="TIMESTAMP" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, business_order_sn, user_id, sign_key, total_money, pay_money, pay_type, business_type, 
+        business_param, `status`, pay_time, pay_expire_time, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.BusinessOrder" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `business_order`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="businessOrderSn != null" >
+                business_order_sn,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="signKey != null" >
+                sign_key,
+            </if>
+            <if test="totalMoney != null" >
+                total_money,
+            </if>
+            <if test="payMoney != null" >
+                pay_money,
+            </if>
+            <if test="payType != null" >
+                pay_type,
+            </if>
+            <if test="businessType != null" >
+                business_type,
+            </if>
+            <if test="businessParam != null" >
+                business_param,
+            </if>
+            <if test="status != null" >
+                `status`,
+            </if>
+            <if test="payTime != null" >
+                pay_time,
+            </if>
+            <if test="payExpireTime != null" >
+                pay_expire_time,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="businessOrderSn != null" >
+                #{businessOrderSn,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="signKey != null" >
+                #{signKey,jdbcType=VARCHAR},
+            </if>
+            <if test="totalMoney != null" >
+                #{totalMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="payMoney != null" >
+                #{payMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null" >
+                #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessType != null" >
+                #{businessType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessParam != null" >
+                #{businessParam,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="payTime != null" >
+                #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payExpireTime != null" >
+                #{payExpireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.BusinessOrder" >
+        update `business_order`
+        <set >
+            <if test="businessOrderSn != null" >
+                business_order_sn = #{businessOrderSn,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="signKey != null" >
+                sign_key = #{signKey,jdbcType=VARCHAR},
+            </if>
+            <if test="totalMoney != null" >
+                total_money = #{totalMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="payMoney != null" >
+                pay_money = #{payMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null" >
+                pay_type = #{payType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessType != null" >
+                business_type = #{businessType,jdbcType=VARCHAR},
+            </if>
+            <if test="businessParam != null" >
+                business_param = #{businessParam,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                `status` = #{status,jdbcType=CHAR},
+            </if>
+            <if test="payTime != null" >
+                pay_time = #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payExpireTime != null" >
+                pay_expire_time = #{payExpireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `business_order`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `business_order`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `business_order`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getInitOrderBySignKey" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from `business_order`
+        where sign_key = #{signKey}
+        and status = 'INIT'
+    </select>
+    <select id="getInitOrderByBusinessOrderSn" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `business_order`
+        where business_order_sn = #{businessSn}
+        and status = 'INIT'
+    </select>
+
+    <update id="paySuccess">
+        update `business_order`
+        set status = 'paid'
+        where business_order_sn = #{businessOrderSn}
+        and status = 'INIT'
+    </update>
+
+
+
+</mapper>

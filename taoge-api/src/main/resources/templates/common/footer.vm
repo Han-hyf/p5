@@ -1,0 +1,81 @@
+</div>
+</div>
+
+<script>
+!function(){
+  function resize(){
+    $('#body').css('min-height', $(window).height());
+  }
+  resize();
+  $(window).resize(resize);
+}()
+
+</script>
+<script id="datePicker" type="text/x-tmpl">
+  <div class="datePicker">
+    <div class="month"><!--=data.Y-->年 - <!--=$.tools.fullNumber(data.M+1)-->月<span class="glyphicon glyphicon-chevron-left"></span><em class="glyphicon glyphicon-chevron-right"></em></div>
+    <ul class="week clearfix">
+      <li>周日</li>
+      <li>周一</li>
+      <li>周二</li>
+      <li>周三</li>
+      <li>周四</li>
+      <li>周五</li>
+      <li>周六</li>
+    </ul>
+    <ul class="days clearfix">
+      <!-- for(var i=0;i<42;i++){-->
+      <!--if(data.arr[i][1]==0){-->
+      <li class="&lt;!--=data.arr[i][2]?'on':''--&gt; <!--=data.arr[i][0].getTime() < data.todayTime && data.afterToday  ? "disabled" : ""--> <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""-->  <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""--> <!--=data.endDay && data.arr[i][0].getTime() > data.endDay ? "disabled" : ""-->"><!--=data.arr[i][0].getDate()--></li>
+      <!-- }else{-->
+      <li class="no <!--=data.arr[i][0].getTime() < data.todayTime && data.afterToday  ? "disabled" : ""--> <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""-->  <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""--> <!--=data.endDay && data.arr[i][0].getTime() > data.endDay ? "disabled" : ""-->"><!--=data.arr[i][0].getDate()--></li>
+      <!--}-->
+      <!-- }-->
+    </ul>
+    <div class="time">
+      <select>
+        <!-- for(var i=0;i<24;i++){--><option <!--=i==data.currentDate.h ? "selected" : ""-->> <!--=$.tools.fullNumber(i)--></option>
+        <!--}-->
+      </select>:
+      <select>
+        <!-- for(var i=0;i<60;i++){--><option <!--=i==data.currentDate.m ? "selected" : ""-->> <!--=$.tools.fullNumber(i)--></option>
+        <!--}-->
+      </select>:
+      <select>
+        <!-- for(var i=0;i<60;i++){--><option <!--=i==data.currentDate.s ? "selected" : ""-->> <!--=$.tools.fullNumber(i)--></option>
+        <!--}-->
+      </select>
+    </div>
+  </div>
+</script>
+<script id="datePicker2" type="text/x-tmpl">
+  <div class="datePicker">
+    <div class="month"><!--=data.Y-->年 - <!--=$.tools.fullNumber(data.M+1)-->月<span class="glyphicon glyphicon-chevron-left"></span><em class="glyphicon glyphicon-chevron-right"></em></div>
+    <ul class="week clearfix">
+      <li>周日</li>
+      <li>周一</li>
+      <li>周二</li>
+      <li>周三</li>
+      <li>周四</li>
+      <li>周五</li>
+      <li>周六</li>
+    </ul>
+    <ul class="days clearfix">
+      <!-- for(var i=0;i<42;i++){-->
+      <!--if(data.arr[i][1]==0){-->
+      <li class="&lt;!--=data.arr[i][2]?'on':''--&gt; <!--=data.arr[i][0].getTime() < data.todayTime && data.afterToday ? "disabled" : ""--> <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""-->  <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""--> <!--=data.endDay && data.arr[i][0].getTime() > data.endDay ? "disabled" : ""-->"><!--=data.arr[i][0].getDate()--></li>
+      <!-- }else{-->
+      <li class="no <!--=data.arr[i][0].getTime() < data.todayTime && data.afterToday ? "disabled" : ""--> <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""-->  <!--=data.startDay && data.arr[i][0].getTime() < data.startDay ? "disabled" : ""--> <!--=data.endDay && data.arr[i][0].getTime() > data.endDay ? "disabled" : ""-->"><!--=data.arr[i][0].getDate()--></li>
+      <!--}-->
+      <!-- }-->
+    </ul>
+  </div>
+</script>
+<script type="text/x-tmpl" id="imgBigTmpl">
+    <img style="width:500px;" src="<!--=data.url-->"/>
+</script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/distpicker.data.js"></script>
+<script src="/static/js/distpicker.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taoge.biz.persistent.dao.OrderMapper" >
+
+    <resultMap id="BaseResultMap" type="com.taoge.biz.persistent.entity.Order" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+        <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+        <result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+        <result column="pay_price" property="payPrice" jdbcType="DECIMAL" />
+        <result column="goods_count" property="goodsCount" jdbcType="INTEGER" />
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+        <result column="pay_date" property="payDate" jdbcType="DATE" />
+        <result column="pay_expired_time" property="payExpiredTime" jdbcType="TIMESTAMP" />
+        <result column="order_status" property="orderStatus" jdbcType="CHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, user_id, order_no, total_price, goods_price, pay_price, goods_count, pay_time, 
+        pay_date, pay_expired_time, order_status, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.taoge.biz.persistent.entity.Order" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into `order`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="orderNo != null" >
+                order_no,
+            </if>
+            <if test="totalPrice != null" >
+                total_price,
+            </if>
+            <if test="goodsPrice != null" >
+                goods_price,
+            </if>
+            <if test="payPrice != null" >
+                pay_price,
+            </if>
+            <if test="goodsCount != null" >
+                goods_count,
+            </if>
+            <if test="payTime != null" >
+                pay_time,
+            </if>
+            <if test="payDate != null" >
+                pay_date,
+            </if>
+            <if test="payExpiredTime != null" >
+                pay_expired_time,
+            </if>
+            <if test="orderStatus != null" >
+                order_status,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNo != null" >
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="totalPrice != null" >
+                #{totalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsPrice != null" >
+                #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="payPrice != null" >
+                #{payPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsCount != null" >
+                #{goodsCount,jdbcType=INTEGER},
+            </if>
+            <if test="payTime != null" >
+                #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payDate != null" >
+                #{payDate,jdbcType=DATE},
+            </if>
+            <if test="payExpiredTime != null" >
+                #{payExpiredTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderStatus != null" >
+                #{orderStatus,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.taoge.biz.persistent.entity.Order" >
+        update `order`
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNo != null" >
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="totalPrice != null" >
+                total_price = #{totalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsPrice != null" >
+                goods_price = #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="payPrice != null" >
+                pay_price = #{payPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsCount != null" >
+                goods_count = #{goodsCount,jdbcType=INTEGER},
+            </if>
+            <if test="payTime != null" >
+                pay_time = #{payTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="payDate != null" >
+                pay_date = #{payDate,jdbcType=DATE},
+            </if>
+            <if test="payExpiredTime != null" >
+                pay_expired_time = #{payExpiredTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orderStatus != null" >
+                order_status = #{orderStatus,jdbcType=CHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `order`
+        where 1 = 1
+    </select>
+
+    <select id="count" resultType="java.lang.Long" >
+        select count(*) from `order`
+        where 1 = 1
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" >
+        select 
+        <include refid="Base_Column_List" />
+        from `order`
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

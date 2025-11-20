@@ -1,0 +1,174 @@
+<div id="globalConfirmDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" class="modal fade" style="z-index: 2000;">
+    <div role="document" class="modal-dialog modal-sm">
+        <div class="modal-content dialog-alert-modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">确认提示</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button id="globalConfirmCancel" type="button" data-dismiss="modal" class="btn btn-secondary" style="padding: 6px 12px; font-size: 14px;">取消</button>
+                <button id="globalConfirmOk" type="button" class="btn btn-primary" style="padding: 6px 12px; font-size: 14px;">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="globalAlertDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" class="modal fade" style="z-index: 2000;">
+    <div role="document" class="modal-dialog modal-sm">
+        <div class="modal-content dialog-alert-modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">提示</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button id="globalAlertOk" type="button" class="btn btn-primary" style="padding: 6px 12px; font-size: 14px;">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-tmpl" id="tmp-dialog">
+<div id="globalEditDiv" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="exampleModalLabel" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                <h4 id="exampleModalLabel" class="modal-title"><!--=data.title--></h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-secondary"><!--=data.cancelButton--></button>
+                <!-- if(data.isEdit == 1){ -->
+                <button id="globalEditSaveBtn" type="button" class="btn btn-primary"><!--=data.confirmButton--></button>
+                <!-- } -->
+            </div>
+        </div>
+    </div>
+</div>
+</script>
+<script>
+    $.confirm = function(message, data, callback, option) {
+        option = option || {}
+        $("#globalConfirmDialog").find(".modal-body").html(message);
+        $("#globalConfirmDialog").find("#globalConfirmOk").unbind("click");
+        $("#globalConfirmDialog").find("#globalConfirmOk").html(option.confirmButton || '确定')
+        $("#globalConfirmDialog .modal-header .modal-title").html(option.title || '确认提示');
+        $("#globalConfirmDialog").find("#globalConfirmOk").bind("click", function(){
+            if (callback) {
+                callback(data);
+            }
+            $("#globalConfirmDialog").modal("hide");
+        });
+        $("#globalConfirmDialog").find("#globalConfirmCancel").unbind("click");
+        $("#globalConfirmDialog").find("#globalConfirmCancel").bind("click", function(){
+            if (option && option.cancelCallback) {
+                option.cancelCallback(data);
+            }
+            $("#globalConfirmDialog").modal("hide");
+        });
+        $("#globalConfirmDialog").modal("show");
+    };
+
+    $.alert = function(message, data, callback, option) {
+        option = option || {}
+        var _this = $("#globalAlertDialog");
+        _this.find(".modal-body").html(message);
+        _this.find("#globalAlertOk").unbind("click");
+        _this.find("#globalAlertOk").bind("click", function(){
+            _this.modal("hide");
+        });
+        _this.modal("show");
+        _this.on('hide.bs.modal', function (e) {
+            callback && callback(data);
+        })
+        if (option.width) {
+            _this.find(".modal-dialog").css("width", option.width);
+            _this.find(".modal-body").css("width", option.width);
+        }
+    };
+    /*
+    $.dialog option
+    ---------------------------------------
+    @onClose                关闭浮层时提示
+    @isread                 1 查看，0 编辑
+    @width                  设置宽度
+    @getMe                  返回dom
+    @handler                初始化后回调
+    */
+    $.dialog = function(html,option) {
+        option = $.extend({
+            isEdit:0,
+            confirmButton:'保存',
+            cancelButton:'取消',
+            title:"",
+            onSubmit:function(){return true;}
+        },option || {});
+        var t = new Date().getTime();
+        var _this = $.tmpl($('#tmp-dialog').html(),option);
+        _this = $(_this);
+        _this.attr("id", t).appendTo($("body"));
+        _this.modal("show");
+        _this.find(".modal-body").html(html);
+        _this.find("#globalEditSaveBtn").removeAttr("id").click(function(){
+            if (option.onSubmit) {
+                var result = option.onSubmit();
+                if (!(result == true || result == null)) {
+                    return;
+                }
+            }
+            _this.modal("hide");
+        });
+        _this.on('hide.bs.modal', function () {
+            // setTimeout(function(){_this.remove()},1000);
+            _this.remove()
+            $('body').removeClass('modal-open')
+            option.onClose && option.onClose()
+        });
+        if (option.width) {
+            _this.find(".modal-dialog").css("width", option.width);
+            _this.find(".modal-content").css("width", option.width);
+        }
+        if (option.handler) {
+            option.handler();
+        }
+        if (option.getMe){
+            option.getMe(_this)
+        }
+        return t;
+    };
+    $.editForm = function(message, html, callback, option) {
+        var t = new Date().getTime();
+        var _this = $("#globalEditDiv").clone();
+        _this.attr("id", t).appendTo($("body"));
+        _this.find(".modal-title").html(message);
+        _this.modal("show");
+        _this.find(".modal-body").html(html);
+        _this.find("#globalEditSaveBtn").removeAttr("id").click(function(){
+            if (callback) {
+                var result = callback();
+                if (!(result == true || result == null)) {
+                    return;
+                }
+            }
+            _this.modal("hide");
+        });
+        _this.on('hide.bs.modal', function () {
+            setTimeout(function(){_this.remove()},1000);
+        });
+        if (option) {
+            if (option.width) {
+                _this.find(".modal-dialog").css("width", option.width);
+                _this.find(".modal-body").css("width", option.width);
+            }
+            if (option.handler) {
+                option.handler();
+            }
+        }
+    };
+</script>

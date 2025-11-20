@@ -1,0 +1,201 @@
+<link href="/static/css/globle.css" rel="stylesheet" />
+<style>
+    .form-group.form-group-upload-img{
+        clear:both;
+        overflow: hidden;
+    }
+    .form-group.form-group-upload-img>*{
+        float:left;
+    }
+    .upload-tip {
+        color: #999;
+    }
+</style>
+<script src="/static/webupload/jquery.sortable.v2.js"></script>
+<script type="text/x-tmpl" id="tmpl-upload-image">
+<ul class="upload-ul <!--=data.isSingle?'clearfix':'imgBox'-->">
+    <li class="upload-pick">
+        <div class="webuploader-container clearfix">
+            <div class="webuploader-pick webuploader-pick-hover"></div>
+            <div style="position: absolute; top: 0px; left: 0px; width: 120px; height: 90px; overflow: hidden; bottom: auto; right: auto;">
+            <!--if(data.isSingle){-->
+                <input type="file" name="file" class="webuploader-element-invisible" accept="image/*">
+            <!--}else{-->
+                <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*">
+            <!--}-->
+            </div>
+        </div>
+    </li>
+</ul>
+<!-- if(data.tip){ -->
+<div class="upload-tip"><!--=data.tip--></div>
+<!-- } -->
+</script>
+
+<script type="text/javascript">
+$(function(){
+    /*
+    参数
+    @accept         限制文件类型
+    */
+    var inputId = 1;
+    /*
+    accept列表
+    http://www.iana.org/assignments/media-types/media-types.xhtml#image
+    */
+    var limitFileTypes = ['jpeg','jpg','png','dmp'];//默认支持的文件类型
+    function imgUpload(option) {
+        var _this = $(this);
+        _this.options = $.extend({
+            isSingle: true,//是否单图
+            isread:false,//是否只读
+            accept: getInitAccept(),
+            tip:'',//上传提示
+            onChange:function(urls){}//上传回调
+        }, option);
+        _this.setSort = function(){
+            if(_this.options.isread) return;
+            _this.find(".imgBox").sortable({items: "li:not(.upload-pick)",callback:function(){
+                _this.options.onChange(getUrls());
+            }});
+        }
+        _this.html($.tmpl($("#tmpl-upload-image").html(), _this.options));
+        if(!_this.options.isSingle) {
+            _this.setSort();
+        }
+        var input = _this.find('input[type="file"]'),id = _createInputId();
+        input.attr({
+            'accept':option.accept,
+            'id':id
+        });
+        $(document).on('change','#'+id,function(){
+            // 校验上传文件类型
+            var files = this.files;
+            var suffixList = getInputFileTypes(input.attr('accept'));
+            if(files.length<1) return;
+            if(suffixList){
+                for(var i=0;i<files.length;i++){
+                    var file = files[i];
+                    var suffixArr = file.name.split(".");
+                    var suffix = suffixArr[suffixArr.length - 1].toLowerCase();
+                    if(suffixList.indexOf(suffix) == -1){
+                        $.alert("只能上传的图片格式为 : " + suffixList.join(','))
+                        return false;
+                    }
+                }
+            }
+            _this.uploadImg(option.isSingle?0:1);
+        })
+        if(!_this.options.isread){
+            _this.on('click','li .diyCancel',function(e){
+                _this.removePic($(this));
+            });
+            _this.removePic = function(ele) {
+                $(ele).parents(".diyUploadHover").remove();
+                _this.options.onChange(getUrls());
+            }
+        }else{
+            _this.find('.upload-pick').hide();
+            setTimeout(function(){
+                _this.find('.diyControl').remove()
+            },200)
+        }
+        _this.uploadImg = function(type) {
+            var $content = _this;
+            var input = $content.find('input[type="file"]');
+            var fileSize = input[0].files[0].size / 1024;
+            if(fileSize > 1024 * 2){
+                $.alert('图片大小不能超过2M');
+                return;
+            }
+            var fileId = input.attr('id')
+            upload(fileId, _this.uploadCallBack, $.extend({type : type, element : $content,fileId:fileId}, _this.options));
+        }
+        _this.reviewImgs = function(){
+            // 回显图片
+            $(_this.options.source).each(function(i,url){
+                if (url) {
+                    _this.addImg(url);
+                }
+            })
+        }
+        _this.addImg = function(url){
+            var index = _this.find("li").length;
+            if(!_this.options.isSingle){
+                _this.find(".upload-pick").before(imgDome(url));
+                _this.setSort();
+            }else{
+                _this.find('li').eq(0).find('.upImgUrl').attr("src",url);
+                if(index < 2){
+                    _this.find("li.upload-pick").before(imgDome(url));
+                }else{
+                }
+            }
+        }
+        function getUrls(){
+            var urls = [];
+            _this.find('.diyUploadHover img.upImgUrl').each(function(index,el){
+                el = $(el);
+                urls.push(el.attr('src'));
+            })
+            if(_this.options.isSingle){
+                return urls[0] ? urls[0] : '';
+            }
+           return urls;
+        }
+        function getInputFileTypes(acceptStr){
+            var strs = acceptStr.split(',');
+            var types = [];
+            for(var i=0;i<strs.length;i++){
+                var imgType = $.trim(strs[i]);
+                imgType = imgType.split('\/');
+                var type = imgType[1] && $.trim(imgType[1]);
+                if(type === '*'){
+                    return limitFileTypes;
+                }else if(type){
+                    types.push(type.toLowerCase());
+                }
+            }
+            return types;
+        }
+        _this.uploadCallBack = function(data,option) {
+            document.getElementById(option.fileId).value='';
+             if (data.code != 200) {
+                 $.alert(data.msg);
+                 return;
+             }
+             _this.addImg(data.data);
+             if (option.onChange) {
+                 option.onChange(getUrls())
+             }
+         }
+        if(_this.options.source&&_this.options.source.length){
+            _this.reviewImgs();
+        }
+    };
+    function _createInputId(){
+        return 'pic-upload-input-id-'+(inputId++);
+    }
+    function getInitAccept(){
+        var types = [];
+        for(var i=0;i<limitFileTypes.length;i++){
+            types.push('image/' + limitFileTypes[i]);
+        }
+        return types.join(',');
+    }
+    function imgDome(url) {
+         //type 0是单图 1是多图
+         var o_li= '<li class="diyUploadHover">'+
+                 '<div class="viewThumb">'+
+                 '<input type="hidden" name="">'+
+                 '<p class="diyControl">'+
+                 '<span class="diyCancel"><i></i></span>'+
+                 '</p>'+
+                 '<img class="upImgUrl" src="'+url+'">'+
+                 '</div>'+
+                 '</li>';
+         return o_li;
+     }
+    $.fn.imgUpload = imgUpload;
+})
+</script>

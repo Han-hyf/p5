@@ -1,0 +1,151 @@
+<!-- 
+常用验证方法
+只验证规则，不验证必填
+
+待加入
+var myregPhone = /^[1][3,4,5,7,8][0-9]{9}$/;//手机
+var myregTell = /^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;//座机
+var reg = /(^(400)-(\d{3})-(\d{4})(.)(\d{1,4})$)|(^(400)-(\d{3})-(\d{4}$))|(^(400)(\d{3})(\d{4}$))|(^(400)-(\d{4})-(\d{3}$))/;//400-800电话
+ -->
+<script type="text/javascript">
+var validateUtils = {
+	// 身份证号
+	carNo:function(value,require){
+		if(value===''&&!require) return true;
+		var reg = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}[0-9Xx]$)/;
+		return reg.test(value);
+	},
+	// 手机号
+	phoneNumber:function(value,require){
+		if(value===''&&!require) return true;
+		var reg = /^[\d]{11}$/;
+		return reg.test(value);
+	},
+	// 邮箱
+	email:function(value,require){
+		if(value===''&&!require) return true;
+		var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+		return reg.test(value);
+	},
+	letterAndNum:function(value,require){
+		if(value===''&&!require) return true;
+		var regLetter = /[a-zA-Z]+/;
+		var regNum = /\d+/;
+		var regAll = /^[a-zA-Z0-9]+$/;
+		return regLetter.test(value) && regNum.test(value) && regAll.test(value);
+	}
+}
+$(function(){
+	/*
+	单字符判断
+	*/
+	var inputLimitUtils = {
+		// 数字和字母
+		letterOrNumer:function(value){
+			var regLetter = /[a-zA-Z]+/;
+			var regNum = /\d+/;
+			return regLetter.test(value) || regNum.test(value);
+		},
+		number:function(value){
+			var regNum = /\d+/;
+			return regNum.test(value);
+		},
+		email:function(value){
+			var regSymbol = /[\.@_+-]+/;
+			var regLetter = /[a-zA-Z]+/;
+			var regNum = /\d+/;
+			return regLetter.test(value) || regNum.test(value) || regSymbol.test(value);
+		},
+		checkCN:function(value){
+			// 不允许输入汉字
+			var reg = /^[\u4e00-\u9fa5]/;
+			return !reg.test(value);
+		},
+		/*只能输入数字和_*/
+		number_:function(value){
+			var regSymbol = /[_]+/;
+			var regNum = /\d+/;
+			return regNum.test(value) || regSymbol.test(value);
+		}
+	}
+	$(document).on('keyup','.input-string-limit input[type="text"],.input-string-limit input[type="number"],.input-string-limit input[type="email"]',_fn);
+	function _fn(){
+		/*
+		录入校验，标签配置
+		父级容器加className  	input-string-limit
+		标签属性valid-type 		value为：inputLimitUtils中的方法名字符串
+		------------
+		校验项
+		- type:email
+		- maxlength
+		- min
+		- max
+		*/
+		var input = $(this);
+		var validType = input.attr('valid-type');
+		var value = input.val();
+		if(value==='') return;
+		// 长度
+		var maxlength = input.attr('maxlength');
+		if(maxlength!=='' && inputLimitUtils.number(maxlength)){
+			maxlength = parseInt(maxlength,10);
+			input.val(value.substr(0,maxlength));
+			value = input.val();
+		}
+		// 字符类型
+		value = input.val();
+		var lastStr = value[value.length-1];
+		if(validType){
+			while(!inputLimitUtils[validType](lastStr)&&value!==''){
+				input.val(value.substr(0,value.length-1));
+				value = input.val();
+				lastStr = value[value.length-1]
+			}
+		}
+		// type=email
+		var type = input.attr('type');
+		/*if(type=='email'){
+			// 不能录入汉字
+			value = input.val();
+			validType = 'email';
+			lastStr = value[value.length-1];
+			console.log(lastStr,inputLimitUtils[validType](lastStr),value);
+			while(!inputLimitUtils[validType](lastStr)){
+				input.val(value.substr(0,value.length-1));
+				value = input.val();
+				lastStr = value[value.length-1]
+			}
+		}*/
+		// 数字，min,max
+		if(type=='number' || validType=='number'){
+			var min = input.attr('min'),max = input.attr('max');
+			value = parseFloat(input.val());
+			if(min!==''){
+				if(value<min){
+					input.val(min);
+				}
+			}
+			value = parseFloat(input.val());
+			if(max!==''){
+				if(value>max){
+					input.val(max);
+				}
+			}
+		}
+	}
+	// 数字区间
+	$(document).on('keyup','.input-string-limit input[section-type="min"],.input-string-limit input[section-type="max"]',function(){
+		var curInput = $(this);
+		var sectionType = curInput.attr('section-type');//min , max
+		var otherInput = curInput.parent().find(sectionType=='min'?'input[section-type="max"]':'input[section-type="min"]');
+		if(otherInput.val()==='' || curInput.val()==='') return;
+		if(sectionType=='min'){
+			var min = parseFloat(curInput.val()),max = parseFloat(otherInput.val());
+			if(min>=max){
+				var value = curInput.val();
+				curInput.val(value.substr(0,value.length-1));
+			}
+		}
+	})
+})
+</script>
