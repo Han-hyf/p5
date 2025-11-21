@@ -35,8 +35,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.IndexOperations;
+
 import org.springframework.util.ConcurrentReferenceHashMap;
+import org.springframework.data.elasticsearch.core.IndexOperations;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
