@@ -48,12 +48,28 @@ public abstract class BaseController<RequestParam extends BaseParam> {
     @ResponseBody
     public abstract ResponseData<?> execute(RequestParam param);
 
-    protected void setToken(String token) {
-        ControllerUtil.setToken(token, domain, getResponse());
+    protected void setUserToken(String token) {
+        ControllerUtil.setToken(token, TokenTypeEnum.TOKEN, getResponse());
     }
 
-    protected void cleanToken() {
-        ControllerUtil.cleanToken(getResponse(), domain);
+    protected void cleanUserToken() {
+        ControllerUtil.cleanToken(TokenTypeEnum.TOKEN, getResponse());
+    }
+
+    protected void setMerchantToken(String token) {
+        ControllerUtil.setToken(token, TokenTypeEnum.MERCHANT_TOKEN, getResponse());
+    }
+
+    protected void cleanMerchantToken() {
+        ControllerUtil.cleanToken(TokenTypeEnum.MERCHANT_TOKEN, getResponse());
+    }
+
+    protected void setSysUserToken(String token) {
+        ControllerUtil.setToken(token, TokenTypeEnum.SYS_TOKEN, getResponse());
+    }
+
+    protected void cleanSysUserToken() {
+        ControllerUtil.cleanToken(TokenTypeEnum.SYS_TOKEN, getResponse());
     }
 
 }

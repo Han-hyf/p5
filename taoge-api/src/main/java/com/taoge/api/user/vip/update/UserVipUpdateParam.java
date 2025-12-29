@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 
 @Data
 public class UserVipUpdateParam extends BaseParam {
+    @NotNull
     private Long id;
     @NotNull
     private String vipName;

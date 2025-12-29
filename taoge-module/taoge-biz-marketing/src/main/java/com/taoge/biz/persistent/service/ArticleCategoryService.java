@@ -2,7 +2,7 @@
  * @ClassName ArticleCategoryService
  * @Description 
  * @version 1.0
- * @Date 2025-11-13 11:08:48
+ * @Date 2023-11-08 20:24:44
  */
 package com.taoge.biz.persistent.service;
 
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticleCategoryService extends BaseService<ArticleCategory ,ArticleCategoryMapper> {
 
-    public void updateStatus(Long id ,Boolean status){
-        ArticleCategory articleCategory = new ArticleCategory();
-        articleCategory.setId(id);
-        articleCategory.setStatus(status);
-        updateByPrimaryKeySelective(articleCategory);
+    public void updateStatus(Long id, Boolean status) {
+        ArticleCategory update = new ArticleCategory();
+        update.setId(id);
+        update.setStatus(status);
+        updateByPrimaryKeySelective(update);
     }
 }

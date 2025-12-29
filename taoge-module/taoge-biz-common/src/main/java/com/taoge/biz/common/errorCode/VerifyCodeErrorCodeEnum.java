@@ -5,11 +5,11 @@ package com.taoge.biz.common.errorCode;
  */
 public enum VerifyCodeErrorCodeEnum {
 
-    SMS_CODE_SEND(1000,"你的短信验证码已发送"),
-    SMS_CODE_WRONG(1001,"验证码错误"),
-    SMS_CODE_NOT_EXISTS(1002,"您的验证码不存在"),
-    SMS_CODE_EXPIRE(1003,"您的验证码已过期"),
-    SMS_CODE_FAIL(1004,"错误次数过多，请重新发送短信验证码")
+    SMS_CODE_SEND(10000, "您的短信验证码已发送"),
+    SMS_CODE_WRONG(10001, "您的验证码错误"),
+    SMS_CODE_NOT_EXISTS(10002, "短信验证码不存在，请先获取"),
+    SMS_CODE_EXPIRE(10003, "短信验证码已过期，请重新获取"),
+    SMS_CODE_FAIL(10003, "短信验证码校验失败，请重新获取"),
     ;
 
 
@@ -28,7 +28,4 @@ public enum VerifyCodeErrorCodeEnum {
     public String getMsg() {
         return msg;
     }
-
-
-
 }

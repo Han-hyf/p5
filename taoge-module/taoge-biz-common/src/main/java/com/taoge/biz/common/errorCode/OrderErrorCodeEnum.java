@@ -5,13 +5,10 @@ package com.taoge.biz.common.errorCode;
  */
 public enum OrderErrorCodeEnum {
 
-
-    INIT_EXIST_ERROR(40001,"您有未支付的订单"),
-    BUSINESS_ORDER_NOT_EXISTS(40002,"业务订单不存在"),
-    APPLY_ORDER_ERROR(40003,"订单创建失败")
-
+    INIT_ORDER_EXISTS(40000, "您有待支付的订单"),
+    BUSINESS_ORDER_NOT_EXISTS(40001, "业务订单不存在"),
+    APPLY_ORDER_ERROR(40002, "创建订单失败，请重试"),
     ;
-
 
     private final int code;
     private final String msg;
@@ -28,7 +25,4 @@ public enum OrderErrorCodeEnum {
     public String getMsg() {
         return msg;
     }
-
-
-
 }

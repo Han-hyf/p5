@@ -1,12 +1,13 @@
 package com.taoge.framework.es.service;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageInfo;
 import com.taoge.framework.es.common.ElasticQueryEntity;
 import com.taoge.framework.es.common.EsPage;
 import com.taoge.framework.es.common.IdField;
+import com.taoge.framework.es.common.QueryEntity;
 import com.taoge.framework.es.exception.EsException;
 import com.taoge.framework.es.util.JacksonUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -22,8 +23,11 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.client.indices.GetIndexResponse;
+import org.elasticsearch.common.geo.GeoDistance;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -35,9 +39,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-
-import org.springframework.util.ConcurrentReferenceHashMap;
 import org.springframework.data.elasticsearch.core.IndexOperations;
+import org.springframework.util.ConcurrentReferenceHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -394,10 +397,10 @@ public class ElasticService<T> {
                     case NOT_EQ:
                         boolQueryBuilder.mustNot(QueryBuilders.termQuery(attr.getName(), attr.getValue1()));
                         break;
-                    case LT:
+                    case LT: // less then
                         boolQueryBuilder.must(QueryBuilders.rangeQuery(attr.getName()).lt(attr.getValue1()));
                         break;
-                    case LTE:
+                    case LTE: // less then equal
                         boolQueryBuilder.must(QueryBuilders.rangeQuery(attr.getName()).lte(attr.getValue1()));
                         break;
                     case GT:
@@ -436,6 +439,13 @@ public class ElasticService<T> {
                         break;
                     case ANALYSIS:
                         boolQueryBuilder.filter(QueryBuilders.matchQuery(attr.getName(), attr.getValue1()));
+                        break;
+                    case GEO:
+                        QueryEntity.GeoAttr geoAttr = (QueryEntity.GeoAttr) attr.getValue1();
+                        GeoDistanceQueryBuilder builder = new GeoDistanceQueryBuilder(attr.getName());
+                        builder.point(Double.parseDouble(geoAttr.getLat()), Double.parseDouble(geoAttr.getLon()));
+                        builder.distance(geoAttr.getDistance(), geoAttr.getUnit());
+                        boolQueryBuilder.filter(builder);
                         break;
                 }
             }

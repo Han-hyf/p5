@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class UserVipApplyPayParam extends BaseParam {
-
     @NotNull
     private String businessOrderSn;
     @NotNull

@@ -2,13 +2,14 @@
  * @ClassName VerifyCode
  * @Description 
  * @version 1.0
- * @Date 2025-10-23 16:05:19
+ * @Date 2023-10-31 21:36:54
  */
 package com.taoge.biz.persistent.entity;
 
 import com.taoge.framework.annotation.PrimaryKey;
-import java.util.Date;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class VerifyCode {

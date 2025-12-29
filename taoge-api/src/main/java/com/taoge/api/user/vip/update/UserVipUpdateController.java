@@ -1,8 +1,6 @@
 package com.taoge.api.user.vip.update;
 
-import com.taoge.api.user.vip.add.UserVipAddParam;
 import com.taoge.biz.server.UserAccountServer;
-import com.taoge.biz.server.param.vip.AddUserVipConfigParam;
 import com.taoge.biz.server.param.vip.UpdateUserVipConfigParam;
 import com.taoge.framework.common.ResponseData;
 import com.taoge.framework.controller.BaseController;
@@ -14,7 +12,6 @@ import javax.annotation.Resource;
 
 @RestController
 public class UserVipUpdateController extends BaseController<UserVipUpdateParam> {
-
     @Resource
     UserAccountServer userAccountServer;
 
@@ -25,6 +22,4 @@ public class UserVipUpdateController extends BaseController<UserVipUpdateParam> 
         userAccountServer.updateUserVipConfig(updateUserVipConfigParam);
         return ResponseData.success();
     }
-
-
 }

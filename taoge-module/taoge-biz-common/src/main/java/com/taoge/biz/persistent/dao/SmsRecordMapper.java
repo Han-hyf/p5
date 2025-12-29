@@ -2,17 +2,14 @@
  * @ClassName SmsRecordMapper
  * @Description 
  * @version 1.0
- * @Date 2025-10-23 16:05:19
+ * @Date 2023-10-31 20:28:12
  */
 package com.taoge.biz.persistent.dao;
 
 import com.taoge.biz.persistent.entity.SmsRecord;
-
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.taoge.biz.persistent.entity.VerifyCode;
 import org.apache.ibatis.annotations.*;
 
 public interface SmsRecordMapper {
@@ -86,5 +83,8 @@ public interface SmsRecordMapper {
 
     List<SmsRecord> selectByIds(List<?> list);
 
-    Long countByMobileInDay(@Param("userId")Long userId, @Param("mobile")String mobile, @Param("actionType")String actionType);
+    /**
+     * 统计用户、手机号、当天发送次数
+     */
+    Long countByMobileInDay(@Param("userId") Long userId, @Param("mobile") String mobile, @Param("actionType") String actionType);
 }

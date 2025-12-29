@@ -7,7 +7,6 @@ import com.taoge.biz.server.UserServer;
 import com.taoge.biz.server.VerifyCodeServer;
 import com.taoge.biz.server.param.sms.SendSmsCodeParam;
 import com.taoge.framework.annotation.Guest;
-import com.taoge.framework.annotation.NotNull;
 import com.taoge.framework.common.ResponseData;
 import com.taoge.framework.common.UserInfo;
 import com.taoge.framework.controller.BaseController;
@@ -20,33 +19,29 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-public class SmsSendLoginController extends BaseController<SmsSendLoginParam>{
-
+public class SmsSendLoginController extends BaseController<SmsSendRegisterParam> {
     @Resource
     VerifyCodeServer verifyCodeServer;
     @Resource
     UserServer userServer;
 
-
     @Guest
+    @Override
     @PostMapping("/api/sms/send/login")
-    public ResponseData<?> execute(@RequestBody SmsSendLoginParam param) {
+    public ResponseData<?> execute(@RequestBody SmsSendRegisterParam param) {
         UserInfo userInfo = UserContext.get();
-
-        //校验是否已经被注册,如没有被注册则返回提示
+        // 校验手机号是否已经注册，未注册手机号返回提示
         boolean isRegister = userServer.validateMobileIsRegister(param.getOriginMobile());
-        if (!isRegister){
-            throw new BusinessException(UserErrorCodeEnum.MOBILE_NOT_EXISTS_ERROR.getCode(),UserErrorCodeEnum.MOBILE_NOT_EXISTS_ERROR.getMsg());
+        if (!isRegister) {
+            throw new BusinessException(UserErrorCodeEnum.MOBILE_NOT_EXISTS_ERROR.getCode(), UserErrorCodeEnum.MOBILE_NOT_EXISTS_ERROR.getMsg());
         }
 
         SendSmsCodeParam sendSmsCodeParam = param.convertTo(SendSmsCodeParam.class);
-        sendSmsCodeParam.setActionType(SmsActionType.LOGIN);
         sendSmsCodeParam.setUserId(userInfo.getUserId());
+        sendSmsCodeParam.setIso("CN");
+        sendSmsCodeParam.setActionType(SmsActionType.LOGIN);
         sendSmsCodeParam.setIp("127.0.0.1");
-        sendSmsCodeParam.setIso("+86");
-        verifyCodeServer.sendSmsCode(sendSmsCodeParam,"param");
+        verifyCodeServer.sendSmsCode(sendSmsCodeParam);
         return ResponseData.success();
     }
-
-
 }

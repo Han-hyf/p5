@@ -5,13 +5,11 @@ package com.taoge.biz.common.errorCode;
  */
 public enum SmsErrorCodeEnum {
 
-
-    SEND_SMS_MAX_COUNT(1002,"今日短信已达上限"),
-    SEND_SMS_ISO_ERROR(1003,"暂时不支持你的国家"),
-    BUSINESS_CONTROL(1004,"操作过快，请您稍后"),
-    SEND_SMS_ERROR(1005,"短信验证码发送失败")
+    SEND_SMS_DAY_MAX_COUNT_ERROR(20000, "当日发送短信已超上限，请明日重试"),
+    SEND_SMS_ISO_ERROR(20001, "暂时不支持您的国家"),
+    BUSINESS_CONTROL(20002, "操作过快，请稍后"),
+    SEND_MSG_ERROR(20003, "短信验证码发送失败"),
     ;
-
 
     private final int code;
     private final String msg;
@@ -28,7 +26,4 @@ public enum SmsErrorCodeEnum {
     public String getMsg() {
         return msg;
     }
-
-
-
 }

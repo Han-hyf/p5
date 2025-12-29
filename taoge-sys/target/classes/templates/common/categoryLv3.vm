@@ -1,0 +1,56 @@
+<!--
+商品分类 3级，使用步骤
+0 列表中商品分类取值：data[i].threeCategoryName||data[i].twoCategoryName||data[i].oneCategoryName
+1 把原来的模板删掉，id替换成resourceOptionTmpl
+2 在拉取分类/all接口处，执行set_categoryMap()
+3 在查询接口处，使用getSearchParamFor_categoryLv3(原有的参数对象)
+-->
+<script type="text/x-tmpl" id="resourceOptionTmpl">
+<!--if(data.list && data.list.length > 0){-->
+    <!--for(var i = 0; i < data.list.length; i++){-->
+            <option data-index="<!--=i-->" data-level="<!--=data.level-->" value="<!--=data.list[i].id-->" <!--if(data.currentId == data.list[i].id){-->selected<!--}-->>
+            <!--if(data.level > 0){-->
+            <!--for(var level = 0; level < data.level; level++){-->　<!--}-->|--<!--}--><!--=data.list[i].name-->
+            </option>
+            <!--if(data.list[i].children && data.list[i].children.length > 0){-->
+                <!--=getResourceOptionList(data.level + 1, data.parentId, data.currentId, data.list[i].children)-->
+            <!--}-->
+    <!--}-->
+<!--}-->
+</script>
+<script type="text/javascript">
+	var categoryMap = {};
+	function setSelectCategory(param, level, id) {
+	    if(level == 2) {
+	        param["threeCategoryId"] = id;
+	    } else if (level == 1) {
+	        param["twoCategoryId"] = id;
+	    } else if (level == 0) {
+	        param["oneCategoryId"] = id;
+	    }
+	    if(level && level >= 0) {
+	        return setSelectCategory(param, level - 1, categoryMap[id].parentId);
+	    }
+	    return param;
+	}
+	function set_categoryMap(){
+		ajax("/api/productCategory/allCategory",'',function (data) {
+		    if (data.code == 200) {
+		        if (data.data) {
+		            if(data.data && data.data.length > 0) {
+		                for(var i = 0; i < data.data.length; i++) {
+		                    categoryMap[data.data[i].id] = data.data[i];
+		                }
+		            }
+		        }
+		    }
+		}, {async: false});
+	}
+	function getSearchParamFor_categoryLv3(param){
+		var categorySelect = $("#selectAll option:selected");
+		if(categorySelect) {
+		    param = setSelectCategory(param, categorySelect.data("level"), categorySelect.val());
+		}
+		return param;
+	}
+</script>

@@ -5,6 +5,5 @@ import lombok.Data;
 
 @Data
 public class ApplyAliOrderVO extends BaseVO {
-
     private String businessOrderSn;
 }

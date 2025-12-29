@@ -1,7 +1,5 @@
 package com.taoge.api.article.recently;
 
-import com.taoge.biz.server.ArticleServer;
-import com.taoge.biz.server.param.article.ArticleListParam;
 import com.taoge.framework.annotation.Guest;
 import com.taoge.framework.common.ResponseData;
 import com.taoge.framework.common.UserInfo;
@@ -17,17 +15,14 @@ import javax.annotation.Resource;
 
 @RestController
 public class ArticleRecentlyListController extends BaseController<PageParam> {
-
     @Resource
     ArticleCacheService articleCacheService;
-
 
     @Guest
     @Override
     @PostMapping("/api/article/recentlyList")
     public ResponseData<?> execute(@RequestBody PageParam param) {
         UserInfo userInfo = UserContext.get();
-
-        return ResponseData.success("",articleCacheService.recentlyList(userInfo.getUserId(), param.getPageNum(),param.getPageSize()));
+        return ResponseData.success("", articleCacheService.recentlyList(userInfo.getUserId(), param.getPageNum(), param.getPageSize()));
     }
 }

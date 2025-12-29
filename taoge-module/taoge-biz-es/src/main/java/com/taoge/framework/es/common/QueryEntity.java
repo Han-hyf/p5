@@ -1,5 +1,8 @@
 package com.taoge.framework.es.common;
 
+import lombok.Data;
+import org.elasticsearch.common.unit.DistanceUnit;
+
 import java.util.*;
 
 public class QueryEntity {
@@ -309,6 +312,15 @@ public class QueryEntity {
         addQuery(condition, name, QueryType.ANALYSIS, value, null);
     }
 
+    public void geo(boolean condition, String name, String lat, String lon, double distance, DistanceUnit unit) {
+        GeoAttr geoAttr = new GeoAttr();
+        geoAttr.setLat(lat);
+        geoAttr.setLon(lon);
+        geoAttr.setDistance(distance);
+        geoAttr.setUnit(unit);
+        addQuery(condition, name, QueryType.GEO, geoAttr, null);
+    }
+
     protected void addQuery(String name, QueryType type, Object value1, Object value2) {
         addQuery(true, name, type, value1, value2);
     }
@@ -358,6 +370,14 @@ public class QueryEntity {
         public Object getValue2() {
             return value2;
         }
+    }
+
+    @Data
+    public static class GeoAttr {
+        private String lat;
+        private String lon;
+        private double distance;
+        private DistanceUnit unit;
     }
 
     /**
@@ -423,7 +443,11 @@ public class QueryEntity {
         /**
          * 分词
          */
-        ANALYSIS
+        ANALYSIS,
+        /**
+         * 地图搜索
+         */
+        GEO
 
     }
 

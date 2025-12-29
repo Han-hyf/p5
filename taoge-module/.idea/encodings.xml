@@ -6,11 +6,11 @@
     <file url="file://$PROJECT_DIR$/taoge-biz-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/taoge-biz-es/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/taoge-biz-marketing/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/taoge-biz-merchant/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/taoge-biz-mq/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/taoge-biz-order/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/taoge-biz-product/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/taoge-biz-server/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/taoge-biz-student/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/taoge-biz-user/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/taoge-biz-user/src/main/resources" charset="UTF-8" />
   </component>
 </project>

@@ -5,7 +5,6 @@ import com.taoge.framework.controller.BaseParam;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Data
 public class UserVipAddParam extends BaseParam {

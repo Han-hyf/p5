@@ -1,0 +1,91 @@
+<#assign yqTitle = "店铺详情">
+<#include "/common/header.vm" />
+<style>
+    .admin-row{
+        /*text-align: left;*/
+    }
+    .tableCol{
+        width: 140px;
+        margin-right: 70px;
+    }
+    .mt-0{
+        font-weight: 700
+    }
+    .checkbox {
+        padding-right: 15px;
+        margin: 16px 0 !important;
+    }
+    .checkbox label{
+        padding-left: 0;
+    }
+    .checkbox span{
+        margin-right: 50px;
+    }
+    .content{
+        display: inline-block;
+        width: 280px;
+    }
+    td{
+        font-size: 14px;
+    }
+
+</style>
+<div class="container-fluid" id="container_top">
+
+</div>
+<script type="text/x-tmpl" id="dataTmpl">
+    <div class="media row">
+        <div class="media-body">
+            <div class="checkbox">
+                <span class="content">
+                    <label class="">店铺名称：</label>
+                    <span><!--=data.shopName--></span>
+                </span>
+                <span class="content">
+                    <label class="">店铺logo：</label>
+                    <span><img width="100px" src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" class="mr-3" alt="..."></span>
+                </span>
+            </div>
+            <div class="checkbox">
+                <span class="content">
+                    <label class="">省：</label>
+                    <span><!--=data.province--></span>
+                </span>
+                <span class="content">
+                    <label class="">市：</label>
+                    <span><!--=data.city--></span>
+                </span>
+            </div>
+            <div class="checkbox">
+                <span class="content">
+                    <label class="">区：</label>
+                    <span><!--=data.district--></span>
+                </span>
+                <span class="content">
+                    <label class="">街道：</label>
+                    <span><!--=data.street--></span>
+                </span>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    $(function () {
+        getDetail()
+    })
+    //直播详情上的数据
+    function getDetail(){
+        ajax("/api/merchant/shop/info", {}, function (data) {
+            if (data.code == 200) {
+                const tmpl = $.tmpl($("#dataTmpl").html(), data.data);
+                $("#container_top").html(tmpl);
+            } else {
+                $.alert(data.msg);
+            }
+        },{async:false});
+    }
+
+</script>
+
+<#include "/common/footer.vm">

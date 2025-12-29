@@ -7,7 +7,6 @@ import java.util.Date;
 
 @Data
 public class ArticleListVO extends BaseVO {
-
     private Long id;
     private Long category1Id;
     private Long category2Id;
@@ -17,5 +16,4 @@ public class ArticleListVO extends BaseVO {
     private String title;
     private String subTitle;
     private Date publishTime;
-
 }

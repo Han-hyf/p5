@@ -191,6 +191,12 @@
         </foreach>
     </select>
 
+    <select id="getByBusinessOrderSn" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `user_vip_record`
+        where business_order_sn = #{businessOrderSn}
+    </select>
 
     <update id="paySuccess">
         update `user_vip_record`
@@ -198,12 +204,4 @@
         where business_order_sn = #{businessOrderSn}
         and status = 'INIT'
     </update>
-
-    <select id="getByBusinessOrderSn" resultMap="BaseResultMap" >
-        select
-        <include refid="Base_Column_List" />
-        from `user_vip_record`
-        where business_order_sn = #{businessOrderSn}
-    </select>
-
 </mapper>

@@ -12,15 +12,12 @@ import javax.annotation.Resource;
 
 @RestController
 public class ArticleCategoryDisableController extends BaseController<IdParam> {
-
     @Resource
     ArticleServer articleServer;
-
 
     @Override
     @PostMapping("/api/articleCategory/disable")
     public ResponseData<?> execute(@RequestBody IdParam param) {
-
         articleServer.disableArticleCategory(param);
         return ResponseData.success();
     }

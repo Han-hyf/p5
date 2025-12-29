@@ -4,20 +4,23 @@ package com.taoge.framework.constantsEnum;
  * token类型
  */
 public enum TokenTypeEnum {
-    TOKEN("t"), // 用户token
-    ANCHOR_TOKEN("t"), // 主播token
-    ASSISTANT_TOKEN("t"), // 助理token
-    SYS_TOKEN("sys_t"), // 平台管理员token
-    MERCHANT_TOKEN("merchant_t"), // 商户token
+    TOKEN("token", "www.taogeedu.com"), // 用户token
+    MERCHANT_TOKEN("m_token", "cms.taogeedu.com"), // 商户token
+    SYS_TOKEN("sys_token", "sys.taogeedu.com"), // 系统用户token
     ;
-    private String key;
+    private final String key;
+    private final String domain;
 
-    TokenTypeEnum(String key) {
+    TokenTypeEnum(String key, String domain) {
         this.key = key;
+        this.domain = domain;
     }
 
     public String getKey() {
         return key;
     }
 
+    public String getDomain() {
+        return domain;
+    }
 }

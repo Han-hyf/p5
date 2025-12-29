@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class UserLoginByMobileParam extends BaseParam {
-
     @NotNull(name = "手机号")
     private String mobile;
 }

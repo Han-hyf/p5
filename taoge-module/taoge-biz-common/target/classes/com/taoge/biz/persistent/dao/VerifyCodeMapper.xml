@@ -120,25 +120,24 @@
         </foreach>
     </select>
 
-    <select id="selectValidCode" resultMap="BaseResultMap" >
+    <select id="selectValidCode" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from `verify_code`
         where user_id = #{userId}
         and mobile = #{mobile}
         and action_type = #{actionType}
-        and status in ('INIT','WRONG')
-        order by id desc
-        limit 1
+        and expire_time > current_time()
+        and status in
+        <foreach collection="statusList" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
     </select>
 
-    <update id="updateExpireCode" >
+    <update id="validateFail">
         update `verify_code`
-        set status = 'INVALID'
-        where user_id = #{userId}
-        and mobile = #{mobile}
-        and action_type = #{actionType}
-        and status in ('INIT','WRONG')
-
+        set status = #{status}, fail_count = fail_count + 1
+        where id = #{id}
     </update>
+
 </mapper>

@@ -2,7 +2,7 @@
  * @ClassName ArticleMapper
  * @Description 
  * @version 1.0
- * @Date 2025-11-13 11:08:48
+ * @Date 2023-11-08 20:24:44
  */
 package com.taoge.biz.persistent.dao;
 
@@ -101,5 +101,4 @@ public interface ArticleMapper {
     int publish(@Param("id") Long id);
 
     int offline(@Param("id") Long id);
-
 }

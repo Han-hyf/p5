@@ -13,23 +13,23 @@ import javax.annotation.Resource;
 
 @Configuration
 public class ServerRedisConfig {
-
-
     @Resource
     private RedisConnectionFactory redisConnectionFactory;
 
-
     @Bean
-    public RedisTemplate<String, ArticleStatisticsVO> articleStatisticsRedisTemplate(){
-        RedisTemplate<String,ArticleStatisticsVO> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, ArticleStatisticsVO> articleStatisticsRedisTemplate() {
+        RedisTemplate<String, ArticleStatisticsVO> redisTemplate = new RedisTemplate<>();
+        // string 类型
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer(ArticleStatisticsVO.class));
+
+        // hash 类型
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 
-
+        // redisTemplate.opsForValue() -> redis set , string 数据类型
         return redisTemplate;
     }
-
 }

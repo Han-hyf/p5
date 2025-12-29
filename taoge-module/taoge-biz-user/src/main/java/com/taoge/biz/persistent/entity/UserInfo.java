@@ -2,7 +2,7 @@
  * @ClassName UserInfo
  * @Description 
  * @version 1.0
- * @Date 2025-11-05 14:40:52
+ * @Date 2023-11-05 21:35:26
  */
 package com.taoge.biz.persistent.entity;
 

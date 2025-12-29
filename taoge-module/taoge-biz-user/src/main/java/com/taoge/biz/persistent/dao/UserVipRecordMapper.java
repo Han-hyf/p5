@@ -2,7 +2,7 @@
  * @ClassName UserVipRecordMapper
  * @Description 
  * @version 1.0
- * @Date 2025-11-06 17:52:35
+ * @Date 2023-11-06 21:28:21
  */
 package com.taoge.biz.persistent.dao;
 
@@ -80,5 +80,4 @@ public interface UserVipRecordMapper {
     int paySuccess(@Param("businessOrderSn") String businessOrderSn);
 
     UserVipRecord getByBusinessOrderSn(@Param("businessOrderSn") String businessOrderSn);
-
 }

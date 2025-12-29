@@ -6,9 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class UserVipConfigVO extends BaseVO {
-
-    private Long id;
+public class UserVipConfigVO extends BaseVO {private Long id;
     private String vipName;
     private BigDecimal vipPrice;
     private String vipIcon;

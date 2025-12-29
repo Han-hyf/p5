@@ -11,10 +11,7 @@ import com.taoge.framework.annotation.Guest;
 import com.taoge.framework.common.ResponseData;
 import com.taoge.framework.common.UserInfo;
 import com.taoge.framework.controller.BaseController;
-import com.taoge.framework.controller.BaseParam;
 import com.taoge.framework.util.TokenUtil;
-import com.taoge.framework.util.UserContext;
-import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,36 +20,33 @@ import javax.annotation.Resource;
 
 @RestController
 public class SecurityLoginMobileController extends BaseController<SecurityLoginMobileParam> {
-
     @Resource
     VerifyCodeServer verifyCodeServer;
     @Resource
     UserServer userServer;
 
-
     @Guest
     @Override
     @PostMapping("/api/security/login/mobile")
     public ResponseData<?> execute(@RequestBody SecurityLoginMobileParam param) {
-        //校验验证码
-
+        // 校验短信验证码
         ValidateSmsCodeParam validateSmsCodeParam = param.convertTo(ValidateSmsCodeParam.class);
         validateSmsCodeParam.setActionType(SmsActionType.LOGIN);
         verifyCodeServer.validateSmsCode(validateSmsCodeParam);
 
-        //登录
-
+        // 登录
         UserLoginByMobileParam userLoginByMobileParam = new UserLoginByMobileParam();
         userLoginByMobileParam.setMobile(param.getOriginMobile());
         UserLoginVO userLoginVO = userServer.loginByMobile(userLoginByMobileParam);
 
-        //不能直接返回userID,封装一个token返回
-        UserInfo userInfo = TokenUtil.generateToken(userLoginVO.getUserId());
+        // 生成token
+        UserInfo userInfo = TokenUtil.generateUserToken(userLoginVO.getUserId());
         SecurityLoginVO securityLoginVO = new SecurityLoginVO();
         securityLoginVO.setToken(userInfo.getToken());
 
-        //如果是h5请求,可以直接setToken
-        setToken(userInfo.getToken());
-        return ResponseData.success("",securityLoginVO);
+        // 如果是h5请求，可以直接setToken
+        setUserToken(userInfo.getToken());
+
+        return ResponseData.success("", securityLoginVO);
     }
 }

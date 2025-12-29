@@ -7,6 +7,7 @@ import com.taoge.framework.annotation.NotSign;
 import com.taoge.framework.annotation.Param;
 import com.taoge.framework.common.ResponseData;
 import com.taoge.framework.common.UserInfo;
+import com.taoge.framework.constantsEnum.TokenTypeEnum;
 import com.taoge.framework.exception.ParamException;
 import com.taoge.framework.exception.TokenException;
 import com.taoge.framework.util.*;
@@ -27,26 +28,15 @@ import java.lang.reflect.Field;
 import java.net.SocketException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Created by xuejingtao
  */
-public class BaseInterceptor implements HandlerInterceptor {
+public abstract class BaseInterceptor implements HandlerInterceptor {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private static String ip;
-
-    static {
-        try {
-            ip = Utils.getInnerIp();
-        } catch (SocketException ignored) {
-        } finally {
-            if (StringUtils.isBlank(ip)) {
-                ip = "127.0.0.1";
-            }
-        }
-    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -58,7 +48,7 @@ public class BaseInterceptor implements HandlerInterceptor {
             response.getWriter().write("ok");
             return false;
         }
-        if (!uri.contains("/api")){
+        if (!uri.contains("/api")) {
             return true;
         }
         RequestId.createId();
@@ -79,44 +69,10 @@ public class BaseInterceptor implements HandlerInterceptor {
         if (null != notSign){
             return;
         }
-        String token = getToken(request);
-
-        if (StringUtils.isEmpty(token)){
-            throw new TokenException();
-        }
-        analysisToken(handler, request);
+        doValidateToken(handler, request);
     }
 
-    private String getToken(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        if (StringUtils.isEmpty(token)){
-            token = CookieUtil.getCookieByName(request,"token");
-            if (token != null){
-                token = URLDecoder.decode(token, StandardCharsets.UTF_8);
-            }
-
-        }
-        return token;
-    }
-
-    private void analysisToken(HandlerMethod handler, HttpServletRequest request) {
-        String token = getToken(request);
-        UserInfo userInfo = TokenUtil.getToken(token);
-        if (null == userInfo){
-            throw new TokenException("用户身份异常");
-        }
-        if (userInfo.getExpireTime() < System.currentTimeMillis()){
-            throw new TokenException("用户身份已过期");
-        }
-
-        // 背景：正常所有接口，必须登录用户才能访问
-        // 需要判断是否是游客可以访问的接口，还是必须登录用户访问的接口
-        Guest guest = handler.getMethodAnnotation(Guest.class);
-        if (null == guest && userInfo.isGuest()) {
-            throw new TokenException("请您先登录");
-        }
-        UserContext.set(userInfo);
-    }
+    protected abstract void doValidateToken(HandlerMethod handler, HttpServletRequest request);
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) {
@@ -125,8 +81,10 @@ public class BaseInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) {
         RequestId.clear();
-        UserContext.remove();
+        doAfterCompletion();
     }
+
+    protected abstract void doAfterCompletion();
 
     private void validateParam(HandlerMethod handlerMethod, HttpServletRequest request) throws Exception {// 获取参数
         Map<String, Object> paramMap = null;
@@ -141,7 +99,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         }
         logger.info("请求开始[URI:{}, Method:{}, Params:{}]", request.getRequestURI(), request.getMethod(), JSONObject.toJSON(paramMap));
         if (paramMap == null) {
-            return;
+            paramMap = new HashMap<>();
         }
 
         MethodParameter[] methodParameters = handlerMethod.getMethodParameters();

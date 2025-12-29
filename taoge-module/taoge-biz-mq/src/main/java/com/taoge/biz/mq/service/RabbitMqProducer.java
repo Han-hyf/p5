@@ -10,13 +10,11 @@ import javax.annotation.Resource;
 
 @Service
 public class RabbitMqProducer {
-
     @Resource
     RabbitTemplate rabbitTemplate;
 
-    //发送消息
-    public <T extends BaseMqMsg>  void sendMessage(T msg, MqExchangeEnum exchange, MqBusinessTypeEnum mqBusinessType){
-        rabbitTemplate.convertAndSend(exchange.getExchange(),mqBusinessType.getRoutingKey(),msg);
+    // 发送消息
+    public <T extends BaseMqMsg> void sendMessage(T msg, MqExchangeEnum exchange, MqBusinessTypeEnum mqBusinessType) {
+        rabbitTemplate.convertAndSend(exchange.getExchange(), mqBusinessType.getRoutingKey(), msg);
     }
-
 }

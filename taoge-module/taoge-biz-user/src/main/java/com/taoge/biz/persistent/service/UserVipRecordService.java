@@ -1,8 +1,8 @@
 /*
  * @ClassName UserVipRecordService
- * @Description 
+ * @Description
  * @version 1.0
- * @Date 2025-11-06 17:52:35
+ * @Date 2023-11-06 21:28:22
  */
 package com.taoge.biz.persistent.service;
 
@@ -15,15 +15,11 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
-public class UserVipRecordService extends BaseService<UserVipRecord ,UserVipRecordMapper> {
+public class UserVipRecordService extends BaseService<UserVipRecord, UserVipRecordMapper> {
     /**
-     * 生成购买vip
-     *
-     * @return
+     * 生成购买vip记录订单
      */
-    public UserVipRecord appBuyVip(Long userId, String businessOrderSn, String vipName, BigDecimal vipPrice, String vipIcon,
-                                   Integer vipDays, String vipDaysName, Integer vipLevel, BigDecimal payAmount) {
-
+    public UserVipRecord applyBuyVip(Long userId, String businessOrderSn, String vipName, BigDecimal vipPrice, String vipIcon, Integer vipDays, String vipDaysName, Integer vipLevel, BigDecimal payAmount) {
         UserVipRecord userVipRecord = new UserVipRecord();
         userVipRecord.setUserId(userId);
         userVipRecord.setBusinessOrderSn(businessOrderSn);
@@ -36,15 +32,18 @@ public class UserVipRecordService extends BaseService<UserVipRecord ,UserVipReco
         userVipRecord.setPayAmount(payAmount);
         insertSelective(userVipRecord);
         return userVipRecord;
-
-
     }
 
-    public Boolean paySuccess(String businessOrderSn) {
+    /**
+     * 支付成功
+     *
+     * @return true-支付成功 false-已更新过
+     */
+    public boolean paySuccess(String businessOrderSn) {
         return getMapper().paySuccess(businessOrderSn) == 1;
     }
 
-    public UserVipRecord getByBusinessOrderSn(String businessOrderSn){
+    public UserVipRecord getByBusinessOrderSn(String businessOrderSn) {
         return getMapper().getByBusinessOrderSn(businessOrderSn);
     }
 }

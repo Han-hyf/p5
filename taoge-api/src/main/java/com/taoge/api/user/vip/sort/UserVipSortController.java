@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-public class UserVipSortController extends BaseController<UserVipSortParam>{
-
-
+public class UserVipSortController extends BaseController<UserVipSortParam> {
     @Resource
     UserAccountServer userAccountServer;
 
@@ -20,7 +18,6 @@ public class UserVipSortController extends BaseController<UserVipSortParam>{
     @PostMapping("/api/user/vip/sort")
     public ResponseData<?> execute(@RequestBody UserVipSortParam param) {
         userAccountServer.sortVipConfig(param.getIds());
-
         return ResponseData.success();
     }
 }

@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class IdParam extends BaseParam {
-
     @NotNull
     private Long id;
 }

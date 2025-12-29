@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class UserVipApplyParam extends BaseParam {
-
     @NotNull
     private Long userVipConfigId;
 }

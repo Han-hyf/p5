@@ -212,9 +212,7 @@
         </foreach>
     </select>
 
-
-
-    <select id="countByMobileInDay" resultType="java.lang.Long" >
+    <select id="countByMobileInDay" resultType="java.lang.Long">
         select count(*)
         from `sms_record`
         where user_id = #{userId}
@@ -222,5 +220,4 @@
         and action_type = #{actionType}
         and send_day = current_date()
     </select>
-
 </mapper>

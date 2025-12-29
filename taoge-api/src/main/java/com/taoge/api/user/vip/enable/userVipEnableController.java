@@ -12,7 +12,6 @@ import javax.annotation.Resource;
 
 @RestController
 public class userVipEnableController extends BaseController<IdParam> {
-
     @Resource
     UserAccountServer userAccountServer;
 

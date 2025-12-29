@@ -25,19 +25,23 @@
             <groupId>com.taoge</groupId>
             <artifactId>taoge-biz-common</artifactId>
             <version>1.0.0</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.taoge</groupId>
             <artifactId>taoge-biz-user</artifactId>
             <version>1.0.0</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.taoge</groupId>
             <artifactId>taoge-biz-marketing</artifactId>
             <version>1.0.0</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <!-- go to https://search.maven.org/search?q=tencentcloud-sdk-java and get the latest version. -->
+            <!-- 请到https://search.maven.org/search?q=tencentcloud-sdk-java查询所有版本，最新版本如下 -->
+            <version>3.1.59</version>
         </dependency>
         <dependency>
             <groupId>com.taoge</groupId>
@@ -48,6 +52,18 @@
         <dependency>
             <groupId>com.taoge</groupId>
             <artifactId>taoge-biz-es</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.taoge</groupId>
+            <artifactId>taoge-biz-merchant</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.taoge</groupId>
+            <artifactId>taoge-biz-product</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>

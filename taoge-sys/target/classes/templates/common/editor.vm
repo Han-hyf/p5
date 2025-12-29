@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="/static/editor/themes/default/default.css" />
+<link rel="stylesheet" href="/static/editor/plugins/code/prettify.css" />
+<script charset="utf-8" src="/static/editor/kindeditor.js"></script>
+<script charset="utf-8" src="/static/editor/lang/zh-CN.js"></script>
+<script charset="utf-8" src="/static/editor/plugins/code/prettify.js"></script>
+<script>
+    var globalEditorMap = {};
+    var __tool_items = [
+        'undo', 'redo', '|', 'code', 'cut', 'copy', 'paste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+        'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+        'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', '/',
+        'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+        'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'multiimage',
+        'table', 'hr', 'emoticons', 'pagebreak',
+        'link', 'unlink'
+    ]
+    $.editor = function(elementId, option){
+        KindEditor.ready(function(K) {
+            var defaultOption = {
+                cssPath : '/static/editor/plugins/code/prettify.css',
+                uploadJson : '/api/file/fileUpload',
+                afterCreate : function() {
+                    var self = this;
+                    K.ctrl(document, 13, function() {
+                        self.sync();
+                        document.forms['example'].submit();
+                    });
+                    K.ctrl(self.edit.doc, 13, function() {
+                        self.sync();
+                        document.forms['example'].submit();
+                    });
+                },
+                items : __tool_items
+            }
+            var e1 = K.create('textarea[id="' + elementId + '"]', $.extend(defaultOption, option));
+            prettyPrint();
+            globalEditorMap[elementId] = e1;
+        });
+    }
+    $.editorActive = function(elementId, option){
+        var K = KindEditor;
+        option = option || {};
+        var defaultOption = {
+            cssPath : '/static/editor/plugins/code/prettify.css',
+            uploadJson : '/api/upload',
+            afterCreate : function() {
+                var self = this;
+                K.ctrl(document, 13, function() {
+                    self.sync();
+                    document.forms['example'].submit();
+                });
+                K.ctrl(self.edit.doc, 13, function() {
+                    self.sync();
+                    document.forms['example'].submit();
+                });
+            },
+            afterUpload:function(self, url, data, name){
+                console.log({self, url, data, name})
+            },
+            items : __tool_items
+        }
+        var e1 = K.create('textarea[id="' + elementId + '"]', $.extend(defaultOption, option));
+        prettyPrint();
+        globalEditorMap[elementId] = e1;
+    }
+    $.getEditor = function(elementId){
+        return globalEditorMap[elementId];
+    }
+</script>
+

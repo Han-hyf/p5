@@ -1,6 +1,5 @@
 package com.taoge.api.article.save;
 
-import com.taoge.biz.common.param.IdParam;
 import com.taoge.biz.server.ArticleServer;
 import com.taoge.biz.server.param.article.SaveArticleParam;
 import com.taoge.framework.common.ResponseData;
@@ -13,7 +12,6 @@ import javax.annotation.Resource;
 
 @RestController
 public class ArticleSaveController extends BaseController<ArticleSaveParam> {
-
     @Resource
     ArticleServer articleServer;
 

@@ -1,5 +1,6 @@
 package com.taoge.biz.server;
 
+import com.alibaba.fastjson.JSON;
 import com.taoge.biz.common.constant.SmsConstant;
 import com.taoge.biz.common.enums.SmsActionType;
 import com.taoge.biz.common.errorCode.SmsErrorCodeEnum;
@@ -8,219 +9,256 @@ import com.taoge.biz.persistent.entity.SmsRecord;
 import com.taoge.biz.persistent.service.SmsRecordService;
 import com.taoge.biz.server.param.sms.SendSmsCodeParam;
 import com.taoge.biz.server.vo.sms.SmsResponse;
-import com.taoge.framework.common.UserInfo;
 import com.taoge.framework.exception.BusinessException;
-import com.taoge.framework.util.UserContext;
+import com.tencentcloudapi.common.Credential;
+import com.tencentcloudapi.common.profile.ClientProfile;
+import com.tencentcloudapi.common.profile.HttpProfile;
+import com.tencentcloudapi.sms.v20190711.SmsClient;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
+import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.taoge.biz.common.redis.SmsRedisKey.getSmsCountInDayKey;
-import static com.taoge.biz.common.redis.SmsRedisKey.getSmsTotalInDay;
-
 @Service
+@Slf4j
 public class SmsServer {
     @Resource
     SmsRecordService smsRecordService;
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
+    private static final String secretId = "AKIDd5JJ5cw75pLekcLplV1Mbdw3wa0DCakg";
+    private static final String secretKey = "rUr1ygDWat0tYgceS6XllWBgy3we8Nfu";
+    private static final String sdkAppId = "1400456063";
+    private static final String signName = "优旷科技";
 
     /**
-     * 所有业务每天可以发送短信的总量
+     * 每天可以发送短信的总条数
      */
-    private static final int SMS_MAX_CODE = 4;
+    private static final int SMS_MAX_COUNT = 999;
 
+    private static final List<String> smsIsoWhiteList;
 
+    static {
+        smsIsoWhiteList = new ArrayList<>();
+        smsIsoWhiteList.add("CN");
+    }
 
-    public SmsResponse sendCodeSms(SendSmsCodeParam param, String code){
-        //保存短信发送记录
-        SmsRecord smsRecord = saveSmsRecode(param.getUserId(), param.getOriginMobile(), param.getMobilePrefix(), param.getIso(), param.getActionType(), param.getTemplateParam(), param.getIp());
-        //调用短信发送服务
-        SmsResponse smsResponse = sendTxSmsCode(param.getActionType(), param.getTemplateParam());
-        //记录已发送的条数
+    public SmsResponse sendCodeSms(SendSmsCodeParam param, String code) {
+
+        // 保存短信发送记录
+        SmsRecord smsRecord = saveSmsRecord(param.getUserId(), param.getOriginMobile(), param.getMobilePrefix(), param.getIso(), param.getActionType(), param.getIp());
+
+        // 调用发送短信服务，可以对接阿里云、腾讯云、金山云等云平台短信sdk
+        SmsResponse smsResponse = sendTxSmsCode(smsRecord.getMobile(), param.getActionType(), code);
+
+        // 记录发送短信条数
         incrementSendSmsCount(param);
-        // 根据发送的结果，更新短信记录状态
-        updateSmsRecordByResponse(smsResponse,smsRecord.getId());
-        return smsResponse;
 
+        // 根据发送结果，更新短信记录状态
+        updateSmsRecordBySmsResponse(smsResponse, smsRecord.getId());
+
+        return smsResponse;
     }
 
     /**
-     * 根据发送结果，更新短信状态
-     * @param smsResponse
-     * @param smsRecordId
+     * 根据发送结果，更新短信记录状态
+     *
+     * @param smsResponse 短信发送结果
+     * @param smsRecordId 短信记录id
      */
-    private void updateSmsRecordByResponse(SmsResponse smsResponse,Long smsRecordId) {
+    private void updateSmsRecordBySmsResponse(SmsResponse smsResponse, Long smsRecordId) {
         SmsRecord update = new SmsRecord();
         update.setId(smsRecordId);
         update.setTemplateCode(smsResponse.getTemplateId());
-
-        if (smsResponse.isSuccess()){
+        update.setTemplateParam(JSON.toJSONString(smsResponse.getTemplateParam()));
+        update.setSendMessage(smsResponse.getSendMessage());
+        if (smsResponse.isSuccess()) {
             update.setSendStatus(true);
-        }else {
+        } else {
             update.setSendStatus(false);
         }
         smsRecordService.updateByPrimaryKeySelective(update);
-
     }
-
-
-    public SmsResponse sendTxSmsCode(SmsActionType actionType,String templateParam){
-
-        //根据模板类型找到模板id
-        String templateId = getTemplateId(actionType);
-        System.out.println(String.format("已发送验证码,模板为%s",templateId));
-        SmsResponse smsResponse = new SmsResponse();
-        smsResponse.setTemplateId(templateId);
-        smsResponse.setTemplateParam(templateParam);
-        smsResponse.setSuccess(true);
-        smsResponse.setChannel("腾讯或阿里等不同平台");
-        return smsResponse;
-    }
-
 
     /**
-     * 根据模板获得对应短信id
-     * @param actionType
+     * 发送腾讯短信
+     *
      * @return
      */
-    private String getTemplateId(SmsActionType actionType) {
+    public SmsResponse sendTxSmsCode(String mobile, SmsActionType actionType, String code) {
+        try {
+            Credential cred = new Credential(secretId, secretKey);
 
-        return SmsConstant.getSmsTemplateCode(actionType);
+            HttpProfile httpProfile = new HttpProfile();
+            httpProfile.setReqMethod("POST");
+            httpProfile.setConnTimeout(60);
+            httpProfile.setEndpoint("sms.tencentcloudapi.com");
+
+            ClientProfile clientProfile = new ClientProfile();
+            clientProfile.setSignMethod("HmacSHA256");
+            clientProfile.setHttpProfile(httpProfile);
+            SmsClient client = new SmsClient(cred, "ap-beijing", clientProfile);
+            SendSmsRequest req = new SendSmsRequest();
+
+            req.setSmsSdkAppid(sdkAppId);
+            req.setSign(signName);
+
+            // 根据业务获取短信模板id
+            String templateId = getTemplateId(actionType);
+            // 获取短信模板参数
+            String[] templateParam = SmsConstant.generateTxTemplateParam(actionType, code);
+
+            req.setTemplateID(templateId);
+            req.setTemplateParamSet(templateParam);
+
+            String[] phoneNumberSet = {mobile};
+            req.setPhoneNumberSet(phoneNumberSet);
+
+            // 定义发送短信返回结果
+            SmsResponse smsResponse = new SmsResponse();
+            smsResponse.setTemplateId(templateId);
+            smsResponse.setTemplateParam(templateParam);
+
+            // 判断如果是开发环境，就不发送真实短信，默认返回成功
+            if (SmsConstant.isEnvDev()) {
+                smsResponse.setSuccess(true);
+            } else {
+                SendSmsResponse res = client.SendSms(req);
+                // 判断是否发送成功
+                smsResponse.setSuccess("Ok".equals(res.getSendStatusSet()[0].getCode()));
+                smsResponse.setSendMessage(JSON.toJSONString(res.getSendStatusSet()[0]));
+                log.info("sendTxSmsCode SendSmsResponse:{}", SendSmsResponse.toJsonString(res));
+            }
+            return smsResponse;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
-     * //保存短信发送记录
+     * 保存短信发送记录
      */
-    public SmsRecord saveSmsRecode(Long userId, String originMobile, String mobilePrefix, String iso, SmsActionType actionType,  String templateParam, String ip){
+    public SmsRecord saveSmsRecord(Long userId, String originMobile, String mobilePrefix, String iso, SmsActionType actionType, String ip) {
         SmsRecord smsRecord = new SmsRecord();
-
         smsRecord.setUserId(userId);
-        smsRecord.setMobile(mobilePrefix+originMobile);
+        smsRecord.setMobile(mobilePrefix + originMobile);
         smsRecord.setMobilePrefix(mobilePrefix);
         smsRecord.setIso(iso);
         smsRecord.setOriginalMobile(originMobile);
-        //actionType.name()相当于toString,将枚举打印出来
         smsRecord.setActionType(actionType.name());
-        //smsRecord.setContent();
-        //smsRecord.setTemplateCode(templateCode);
-        smsRecord.setTemplateParam(templateParam);
         smsRecord.setIp(ip);
-        //smsRecord.setSendMessage();
         smsRecord.setSendTime(new Date());
         smsRecord.setSendDay(new Date());
-
-
         smsRecordService.insertSelective(smsRecord);
-
         return smsRecord;
     }
 
-    public void validateSmsInfo(SendSmsCodeParam param){
-        //校验国家
-        if(!"+86".equals(param.getMobilePrefix())){
-            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_ISO_ERROR.getCode(),SmsErrorCodeEnum.SEND_SMS_ISO_ERROR.getMsg());
+    /**
+     * 校验短信信息
+     */
+    public void validateSmsInfo(SendSmsCodeParam param) {
+        // 校验国家
+        if (!smsIsoWhiteList.contains(param.getIso())) {
+            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_ISO_ERROR.getCode(), SmsErrorCodeEnum.SEND_SMS_ISO_ERROR.getMsg());
+        }
+        // 校验当天，userId维度发送条数是否超上限
+        int smsUserIdCount = countByIdentityInDay(param.getUserId().toString(), param.getActionType());
+        if (smsUserIdCount >= param.getActionType().getMaxCountByDay()) {
+            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getCode(), SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getMsg());
         }
 
-        //按用户ID
-        int smsUserIDCount = countByIdentityInDay(param.getUserId().toString(),param.getActionType());
-        if (smsUserIDCount >= param.getActionType().getMaxCountByDay()){
-            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getCode(),
-                    SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getMsg());
+        // 校验当天，手机号维度发送条数是否超上限
+        int smsMobileCount = countByIdentityInDay(param.getMobilePrefix() + param.getOriginMobile(), param.getActionType());
+        if (smsMobileCount >= param.getActionType().getMaxCountByDay()) {
+            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getCode(), SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getMsg());
         }
 
-        //按手机号
-        int smsMobileCount = countByIdentityInDay(param.getMobilePrefix()+param.getOriginMobile(),param.getActionType());
-        if (smsMobileCount >= param.getActionType().getMaxCountByDay()){
-            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getCode(),
-                    SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getMsg());
+        // 校验当天，ip维度发送条数是否超上限
+        int smsIpCount = countByIdentityInDay(param.getIp(), param.getActionType());
+        if (smsIpCount >= param.getActionType().getMaxCountByDay()) {
+            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getCode(), SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getMsg());
         }
 
-        //按IP
-        int smsIpCount = countByIdentityInDay(param.getIp(),param.getActionType());
-        if (smsIpCount >= param.getActionType().getMaxCountByDay()){
-            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getCode(),
-                    SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getMsg());
-        }
-
-        //
+        // 当天系统的短信发送总量
         int smsTotal = countInDay();
-        if (smsTotal > SMS_MAX_CODE){
-            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getCode(),
-                    SmsErrorCodeEnum.SEND_SMS_MAX_COUNT.getMsg()+SMS_MAX_CODE+"条");
+        if (smsTotal >= SMS_MAX_COUNT) {
+            throw new BusinessException(SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getCode(), SmsErrorCodeEnum.SEND_SMS_DAY_MAX_COUNT_ERROR.getMsg());
         }
-
-
 
     }
 
     /**
-     * 按条件查询当天发送的短信的次数
-     * @param identity 标识：userId,mobile,ip
-     * @param actionType
-     * @return
+     * 按标识查询当天发送总条数
+     *
+     * @param identity   标识：userId,mobile,ip
+     * @param actionType 业务类型
      */
-    public int countByIdentityInDay(String identity,SmsActionType actionType){
-        String day = DateFormatUtils.format(new Date(),"yyyyMMdd");
-        String key = getSmsCountInDayKey(identity,actionType,day);
-        String count = stringRedisTemplate.opsForValue().get(key);
-        if(count != null){
+    public int countByIdentityInDay(String identity, SmsActionType actionType) {
+        // redis key
+        String count = stringRedisTemplate.opsForValue().get(SmsRedisKey.getSmsCountInDayKey(identity, actionType, DateFormatUtils.format(new Date(), "yyyyMMdd")));
+        if (null != count) {
             return Integer.parseInt(count);
         }
         return 0;
     }
-
 
     /**
      * 查询当天发送总量
-     * @return
      */
-    public int countInDay(){
-        String day = DateFormatUtils.format(new Date(),"yyyyMMdd");
-        String key = getSmsTotalInDay(day);
-        String count = stringRedisTemplate.opsForValue().get(key);
-        if(count != null){
+    public int countInDay() {
+        // redis key
+        String count = stringRedisTemplate.opsForValue().get(SmsRedisKey.getSmsTotalInDay(DateFormatUtils.format(new Date(), "yyyyMMdd")));
+        if (null != count) {
             return Integer.parseInt(count);
         }
         return 0;
     }
 
-
     /**
-     * 记录已发送的条数
-     * @param param
+     * 记录已发送条数
      */
     private void incrementSendSmsCount(SendSmsCodeParam param) {
-        String day = DateFormatUtils.format(new Date(),"yyyyMMdd");
+        String day = DateFormatUtils.format(new Date(), "yyyyMMdd");
 
-        //批量执行redis命令
+        // 批量执行redis命令
         stringRedisTemplate.setEnableTransactionSupport(true);
         stringRedisTemplate.multi();
         try {
-            //按userId的
-            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsCountInDayKey(param.getUserId().toString(), param.getActionType(),day));
-            stringRedisTemplate.expire(SmsRedisKey.getSmsCountInDayKey(param.getUserId().toString(), param.getActionType(),day),1, TimeUnit.DAYS);
-            //按手机号的
-            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsCountInDayKey(param.getMobilePrefix()+param.getOriginMobile(), param.getActionType(),day));
-            stringRedisTemplate.expire(SmsRedisKey.getSmsCountInDayKey(param.getMobilePrefix()+param.getOriginMobile(), param.getActionType(),day),1, TimeUnit.DAYS);
-            //按Ip的
-            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsCountInDayKey(param.getIp(), param.getActionType(),day));
-            stringRedisTemplate.expire(SmsRedisKey.getSmsCountInDayKey(param.getIp(), param.getActionType(),day),1, TimeUnit.DAYS);
-            //总的
-            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsTotalInDay(day));
-            stringRedisTemplate.expire(SmsRedisKey.getSmsTotalInDay(day),1, TimeUnit.DAYS);
+            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsCountInDayKey(param.getUserId().toString(), param.getActionType(), day));
+            stringRedisTemplate.expire(SmsRedisKey.getSmsCountInDayKey(param.getUserId().toString(), param.getActionType(), day), 1, TimeUnit.DAYS);
 
+            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsCountInDayKey(param.getMobilePrefix() + param.getOriginMobile(), param.getActionType(), day));
+            stringRedisTemplate.expire(SmsRedisKey.getSmsCountInDayKey(param.getMobilePrefix() + param.getOriginMobile(), param.getActionType(), day), 1, TimeUnit.DAYS);
+
+            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsCountInDayKey(param.getIp(), param.getActionType(), day));
+            stringRedisTemplate.expire(SmsRedisKey.getSmsCountInDayKey(param.getIp(), param.getActionType(), day), 1, TimeUnit.DAYS);
+
+            stringRedisTemplate.opsForValue().increment(SmsRedisKey.getSmsTotalInDay(day));
+            stringRedisTemplate.expire(SmsRedisKey.getSmsTotalInDay(day), 1, TimeUnit.DAYS);
             stringRedisTemplate.exec();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-
-
     }
+
+    /**
+     * 根据业务类型获取模板id
+     *
+     * @param actionType 业务类型
+     */
+    private String getTemplateId(SmsActionType actionType) {
+        return SmsConstant.getSmsTemplateCode(actionType);
+    }
+
 
 }

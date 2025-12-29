@@ -2,7 +2,7 @@
  * @ClassName ArticleStatisticsMapper
  * @Description 
  * @version 1.0
- * @Date 2025-11-13 11:08:48
+ * @Date 2023-11-08 20:24:44
  */
 package com.taoge.biz.persistent.dao;
 
@@ -69,7 +69,7 @@ public interface ArticleStatisticsMapper {
 
     List<ArticleStatistics> selectByIds(List<?> list);
 
-    int addBrowsePv(@Param("articleId") Long articleId,@Param("browsePv") Long browsePv);
+    int addBrowsePv(@Param("articleId") Long articleId, @Param("browsePv") Long browsePv);
 
-    int updateBrowseUv(@Param("articleId")Long id, @Param("browseUv") Long browseUv);
+    int updateBrowseUv(@Param("articleId") Long articleId, @Param("browseUv") Long browseUv);
 }

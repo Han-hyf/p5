@@ -8,11 +8,9 @@ import java.math.BigDecimal;
 
 @Data
 public class ApplyBusinessOrderParam extends BaseParam {
-
     private Long userId;
     private BusinessTypeEnum businessType;
     private String businessParam;
     private BigDecimal totalMoney;
     private BigDecimal payMoney;
-
 }

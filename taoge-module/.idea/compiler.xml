@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_ADDITIONAL_VM_OPTIONS" value="-Djps.track.ap.dependencies=false" />
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="taoge-biz-merchant" />
         <module name="taoge-biz-user" />
         <module name="taoge-biz-order" />
         <module name="taoge-biz-es" />
-        <module name="taoge-biz-server" />
         <module name="taoge-biz-mq" />
+        <module name="taoge-biz-server" />
+        <module name="taoge-biz-product" />
         <module name="taoge-biz-marketing" />
         <module name="taoge-biz-common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="taoge-biz-order (1)" target="11" />
-      <module name="taoge-biz-order (2)" target="11" />
-      <module name="taoge-biz-student" target="11" />
+      <module name="taoge-biz-common" target="11" />
+      <module name="taoge-biz-es" target="11" />
+      <module name="taoge-biz-marketing" target="11" />
+      <module name="taoge-biz-merchant" target="11" />
+      <module name="taoge-biz-mq" target="11" />
+      <module name="taoge-biz-order" target="11" />
+      <module name="taoge-biz-product" target="11" />
+      <module name="taoge-biz-server" target="11" />
+      <module name="taoge-biz-user" target="11" />
+      <module name="taoge-module" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -26,11 +37,11 @@
       <module name="taoge-biz-common" options="-parameters" />
       <module name="taoge-biz-es" options="-parameters" />
       <module name="taoge-biz-marketing" options="-parameters" />
+      <module name="taoge-biz-merchant" options="-parameters" />
       <module name="taoge-biz-mq" options="-parameters" />
       <module name="taoge-biz-order" options="-parameters" />
-      <module name="taoge-biz-order (1)" options="-parameters" />
+      <module name="taoge-biz-product" options="-parameters" />
       <module name="taoge-biz-server" options="-parameters" />
-      <module name="taoge-biz-student" options="-parameters" />
       <module name="taoge-biz-user" options="-parameters" />
     </option>
   </component>

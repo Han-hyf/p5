@@ -5,6 +5,5 @@ import lombok.Data;
 
 @Data
 public class ApplyWxOrderVO extends BaseVO {
-
     private String businessOrderSn;
 }

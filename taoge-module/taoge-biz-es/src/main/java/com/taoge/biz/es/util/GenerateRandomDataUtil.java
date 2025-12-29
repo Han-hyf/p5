@@ -8,6 +8,7 @@ import com.taoge.biz.es.enums.MerchantShopTagOpenTimeEnum;
 import com.taoge.biz.es.merchant.MerchantShopEO;
 import com.taoge.biz.es.merchant.MerchantShopProductEO;
 import com.taoge.biz.es.merchant.MerchantShopTagEO;
+import org.elasticsearch.common.geo.GeoPoint;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,6 +22,13 @@ public class GenerateRandomDataUtil {
     private static final String[] productNames = new String[]{"双椒鸡丁", "西芹炒木耳", "青椒火腿炒蛋", "鱼香肉丝", "干锅土豆片", "白灼菜心", "宫保鸡丁", "蒜蓉粉丝", "玉子豆腐虾仁蒸蛋", "荷塘小炒", "白灼茼蒿", "奥尔良烤翅", "孜然土豆午餐肉", "孜然鸡翅土豆条", "木须鸡蛋", "荷兰豆炒牛柳", "西兰花炒鸡胸肉", "菌菇炒火腿", "茄汁豆腐抱蛋", "芦笋炒虾仁", "红烧排骨", "菠萝咕肉", "蒜苔炒肉丝", "山药炒木耳珍珠糯米丸子", "金钱蛋", "红烧肉", "四季豆炒肉丝", "虾滑藕夹", "红枣糯米"};
     private static final List<String> provinceList = Arrays.asList(provinces);
     private static final List<String> productNameList = Arrays.asList(productNames);
+    private static final List<String> locationList = new ArrayList<>();
+    static {
+        locationList.add("116.433612 39.91112");
+        locationList.add("116.432785 39.911729");
+        locationList.add("116.434932 39.915689");
+        locationList.add("116.432992 39.92013");
+    }
 
     public static MerchantShopEO generatorMerchantShopEO() {
         MerchantShopEO eo = new MerchantShopEO();
@@ -32,11 +40,20 @@ public class GenerateRandomDataUtil {
         eo.setSalesVolume(getRandomLong(1000));
         eo.setScore(getRandomScore());
         eo.setOpenTime(getRandomOpenTimeTags(MerchantShopTagOpenTimeEnum.getTagValues()));
-        eo.setScene(getRandomOpenTimeTags(MerchantShopSceneTimeEnum.getTagValues()));
+        eo.setScene(getRandomOpenTimeTags(MerchantShopSceneTimeEnum.getTagNames()));
         eo.setFacilities(getRandomFacilitiesTags());
         eo.setProductList(getRandomProductList());
         eo.setProductNameList(getProductNameList(eo.getProductList()));
+        eo.setLocation(generateGeoPoint());
         return eo;
+    }
+
+    private static GeoPoint generateGeoPoint() {
+        int index = random.nextInt(locationList.size());
+        String locationStr = locationList.get(index);
+        String[] location = locationStr.split(" ");
+        GeoPoint geoPoint = new GeoPoint(Double.parseDouble(location[1]), Double.parseDouble(location[0]));
+        return geoPoint;
     }
 
     private static List<String> getProductNameList(List<MerchantShopProductEO> productList) {
@@ -67,7 +84,7 @@ public class GenerateRandomDataUtil {
             int index = random.nextInt(list.size());
             MerchantShopFacilitiesEnum e = list.get(index);
             MerchantShopTagEO eo = new MerchantShopTagEO();
-            eo.setTagName(e.name());
+            eo.setTagName(e.getTagName());
             eo.setTabValue(e.getValue());
             tags.add(eo);
             list.remove(e);

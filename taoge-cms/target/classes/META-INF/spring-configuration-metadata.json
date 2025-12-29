@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "web",
+      "type": "com.taoge.admin.filter.RequestFilter",
+      "sourceType": "com.taoge.admin.filter.RequestFilter"
+    }
+  ],
+  "properties": [
+    {
+      "name": "web.pass-filters",
+      "type": "java.lang.String[]",
+      "sourceType": "com.taoge.admin.filter.RequestFilter"
+    }
+  ],
+  "hints": []
+}

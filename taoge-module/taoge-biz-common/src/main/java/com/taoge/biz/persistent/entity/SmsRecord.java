@@ -2,7 +2,7 @@
  * @ClassName SmsRecord
  * @Description 
  * @version 1.0
- * @Date 2025-10-23 16:05:19
+ * @Date 2023-10-31 20:28:12
  */
 package com.taoge.biz.persistent.entity;
 

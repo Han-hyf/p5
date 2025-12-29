@@ -13,21 +13,15 @@ import javax.annotation.Resource;
 
 @RestController
 public class UserUpdateInfoController extends BaseController<UserUpdateInfoParam> {
-
     @Resource
     UserServer userServer;
 
     @Override
     @PostMapping("/api/user/updateInfo")
     public ResponseData<?> execute(@RequestBody UserUpdateInfoParam param) {
-
         UpdateUserInfoParam updateUserInfoParam = param.convertTo(UpdateUserInfoParam.class);
-        //将Integer类型的性别改为枚举类型的
-        GenderEnum genderEnum = GenderEnum.getByGender(param.getGender());
-        updateUserInfoParam.setGender(genderEnum);
-
+        updateUserInfoParam.setGender(GenderEnum.getByGender(param.getGender()));
         userServer.updateUserInfo(updateUserInfoParam);
-
         return ResponseData.success();
     }
 }

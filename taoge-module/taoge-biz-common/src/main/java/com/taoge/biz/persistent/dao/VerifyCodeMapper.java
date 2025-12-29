@@ -2,15 +2,16 @@
  * @ClassName VerifyCodeMapper
  * @Description 
  * @version 1.0
- * @Date 2025-10-23 16:05:19
+ * @Date 2023-10-31 21:36:54
  */
 package com.taoge.biz.persistent.dao;
 
 import com.taoge.biz.persistent.entity.VerifyCode;
+import org.apache.ibatis.annotations.*;
+
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
-
-import org.apache.ibatis.annotations.*;
 
 public interface VerifyCodeMapper {
     @Delete({
@@ -64,6 +65,15 @@ public interface VerifyCodeMapper {
 
     List<VerifyCode> selectByIds(List<?> list);
 
-    VerifyCode selectValidCode(@Param("userId")Long userId,@Param("mobile")String mobile,@Param("actionType")String actionType);
-    int updateExpireCode(@Param("userId")Long userId,@Param("mobile")String mobile,@Param("actionType")String actionType);
+    /**
+     * 查询待验证code
+     * 用户id、手机号、业务类型
+     */
+    VerifyCode selectValidCode(@Param("userId") Long userId, @Param("mobile") String mobile,
+                               @Param("actionType") String actionType, @Param("statusList") List<String> statusList);
+
+    /**
+     * 验证失败
+     */
+    int validateFail(@Param("id") Long id, @Param("status") String status);
 }

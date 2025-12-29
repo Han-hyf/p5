@@ -13,16 +13,13 @@ import javax.annotation.Resource;
 
 @RestController
 public class UserVipApplyController extends BaseController<UserVipApplyParam> {
-
     @Resource
     UserAccountServer userAccountServer;
 
     @Override
     @PostMapping("/api/user/vip/apply")
-    public ResponseData<?> execute(@RequestBody UserVipApplyParam param) {
-
+    public ResponseData<ApplyBuyVipVO> execute(@RequestBody UserVipApplyParam param) {
         ApplyBuyVipParam applyBuyVipParam = param.convertTo(ApplyBuyVipParam.class);
-
         ResponseData<ApplyBuyVipVO> responseData = userAccountServer.applyBuyVip(applyBuyVipParam);
         return responseData;
     }

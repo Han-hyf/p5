@@ -7,11 +7,12 @@
 package com.taoge.biz.persistent.dao;
 
 import com.taoge.biz.persistent.entity.UserInfo;
-import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.ibatis.annotations.*;
 
 public interface UserInfoMapper {
     @Delete({

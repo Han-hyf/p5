@@ -1,0 +1,87 @@
+
+.dropdown-menu {
+    margin-top: 15px;
+    visibility: hidden;
+    opacity: 0;
+    height: 0;
+    display: block !important;
+    -webkit-transition: margin-top .3s, opacity .3s;
+    -o-transition: margin-top .3s, opacity .3s;
+    -moz-transition: margin-top .3s, opacity .3s;
+    transition: margin-top .3s, opacity .3s;
+    border-top: 1px solid #eee !important;
+}
+
+.dropdown-menu ul.list-group {
+    max-height: 300px;
+}
+
+.dropdown-menu.show {
+    margin-top: 0;
+    visibility: visible;
+    opacity: 1;
+    height: auto;
+}
+
+.dropdown-header {
+    font-size: inherit;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-body {
+    padding: 10px 20px;
+}
+
+.dropdown-menu {
+    -webkit-border-radius: .5rem;
+    -moz-border-radius: .5rem;
+    border-radius: .5rem;
+    font-size: .835rem;
+    border: none;
+    -webkit-box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.dropdown-menu.dropdown-menu-big {
+    padding: 0;
+    width: 300px;
+}
+
+.dropdown-menu .dropdown-menu-body {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.dropdown-menu .dropdown-menu-title {
+    background-color: #1565C0;
+    padding: 15px 20px;
+    color: white;
+    -webkit-background-size: cover !important;
+    -moz-background-size: cover !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+.dropdown-menu .dropdown-menu-footer {
+    padding: 10px 20px;
+}
+
+.dropdown-menu ul li.dropdown-menu-title {
+    background: red;
+    margin: 5px 0;
+    padding: 0px 20px 5px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.dropdown-menu ul li.dropdown-menu-title:first-child {
+    margin-top: 0;
+}
+
+.dropdown-menu .dropdown-item:hover, .dropdown-menu .dropdown-item:focus, .dropdown-menu .dropdown-item:active {
+    background: whitesmoke;
+    text-decoration: none;
+    color: #1565C0;
+}

@@ -12,7 +12,8 @@
         <module>taoge-biz-marketing</module>
         <module>taoge-biz-mq</module>
         <module>taoge-biz-es</module>
-
+        <module>taoge-biz-product</module>
+        <module>taoge-biz-merchant</module>
     </modules>
     <parent>
         <groupId>com.taoge</groupId>

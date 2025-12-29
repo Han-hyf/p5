@@ -28,21 +28,19 @@ import com.taoge.framework.common.UserInfo;
 import com.taoge.framework.exception.BusinessException;
 import com.taoge.framework.util.UserContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-
-
 @Service
 @Slf4j
 public class UserAccountServer {
-
     @Resource
     UserVipConfigService userVipConfigService;
     @Resource
@@ -54,120 +52,111 @@ public class UserAccountServer {
     @Resource
     UserVipService userVipService;
 
-
     /**
      * 添加会员配置
      */
-    public void addUserVipConfig(AddUserVipConfigParam param){
-
+    public void addUserVipConfig(AddUserVipConfigParam param) {
         userVipConfigService.add(param.getVipName(), param.getVipPrice(), param.getVipIcon(),
                 param.getVipDays(), param.getVipDaysName(), param.getVipLevel());
-        //刷新缓存
-        refreshUserVipConfigListByRedis();
+
+        // 刷新缓存
+        refreshUerVipConfigListByRedis();
     }
 
     /**
      * 修改会员配置
      */
-    public void updateUserVipConfig(UpdateUserVipConfigParam param){
-        userVipConfigService.update(param.getId(), param.getVipName(), param.getVipPrice(),
-                param.getVipIcon(), param.getVipDays(), param.getVipDaysName(), param.getVipLevel());
+    public void updateUserVipConfig(UpdateUserVipConfigParam param) {
+        userVipConfigService.update(param.getId(), param.getVipName(), param.getVipPrice(), param.getVipIcon(),
+                param.getVipDays(), param.getVipDaysName(), param.getVipLevel());
 
-        //刷新缓存
-        refreshUserVipConfigListByRedis();
+        // 刷新缓存
+        refreshUerVipConfigListByRedis();
     }
 
     /**
-     * 查询会员配置列表
+     * 会员配置列表
+     *
+     * @return
      */
-    public List<UserVipConfigVO> userVipConfigList(UserVipConfigListParam param){
-        //查询redis
-        List<UserVipConfigVO> volist = getUserVipConfigListByRedis();
-        if (CollectionUtils.isEmpty(volist)){
-            return volist;
+    public List<UserVipConfigVO> userVipConfigList(UserVipConfigListParam param) {
+        // 查询redis
+        List<UserVipConfigVO> voList = getUerVipConfigListByRedis();
+        if (CollectionUtils.isNotEmpty(voList)) {
+            return voList;
         }
 
-        //redis没有后,查数据库
-        volist = userVipConfigService.voList(param, UserVipConfigVO.class);
-        //将数据存入redis
-        setUserVipConfigListByRedis(volist);
-        return volist;
+        // 如果没有，查库
+        voList = userVipConfigService.voList(param, UserVipConfigVO.class);
+
+        // set到redis
+        setUerVipConfigListByRedis(voList);
+
+        return voList;
     }
 
     /**
      * 启用会员配置
      */
-    public void enableUserVipConfig(IdParam param){
+    public void enableUserVipConfig(IdParam param) {
         userVipConfigService.updateStatus(param.getId(), true);
     }
 
     /**
      * 禁用会员配置
      */
-    public void disableUserVipConfig(IdParam param){
+    public void disableUserVipConfig(IdParam param) {
         userVipConfigService.updateStatus(param.getId(), false);
-
     }
 
     /**
      * 会员配置排序
      */
-    public void sortVipConfig(List<Long> ids){
-        //根据id,排序
+    public void sortVipConfig(List<Long> ids) {
+        // 根据id，按顺序排序
         userVipConfigService.sort(ids);
     }
-
 
     /**
      * 从redis查询会员配置
      */
-    public List<UserVipConfigVO> getUserVipConfigListByRedis( ){
-        //获得key
+    private List<UserVipConfigVO> getUerVipConfigListByRedis() {
         String key = UserVipConfigRedisKey.getUserVipConfigListKey();
-
-        //根据key查询数据
         String s = stringRedisTemplate.opsForValue().get(key);
-        if (s == null){
+        if (StringUtils.isEmpty(s)) {
             return null;
         }
-        //将String转为JSON
-        List<UserVipConfigVO> voList = JSONArray.parseArray(s, UserVipConfigVO.class);
-        return voList;
+        return JSONArray.parseArray(s, UserVipConfigVO.class);
     }
 
     /**
-     * 将会员数据存入redis
+     * 设置会员列表到redis
      */
-    public void setUserVipConfigListByRedis(List<UserVipConfigVO> list){
+    private void setUerVipConfigListByRedis(List<UserVipConfigVO> list) {
         String key = UserVipConfigRedisKey.getUserVipConfigListKey();
         String s = "";
-        if (CollectionUtils.isEmpty(list)){
-            //将JSON转为String
+        if (CollectionUtils.isNotEmpty(list)) {
             s = JSON.toJSONString(list);
         }
-        stringRedisTemplate.opsForValue().set(key,s,10, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(key, s, 10, TimeUnit.MINUTES);
     }
 
-
     /**
-     * 刷新redis的会员列表
+     * 刷新会员列表缓存
      */
-    public void refreshUserVipConfigListByRedis(){
-        String key = UserVipConfigRedisKey.getUserVipConfigListKey();
-        stringRedisTemplate.delete(key);
+    public void refreshUerVipConfigListByRedis() {
+        stringRedisTemplate.delete(UserVipConfigRedisKey.getUserVipConfigListKey());
     }
 
     /**
      * 创建购买vip订单
      */
     @Transactional
-    public ResponseData<ApplyBuyVipVO> applyBuyVip(ApplyBuyVipParam param){
-
-        //查看当前购买的VIP的状态对不对
+    public ResponseData<ApplyBuyVipVO> applyBuyVip(ApplyBuyVipParam param) {
+        // 查询并校验vip配置是否正常
         UserVipConfig userVipConfig = userVipConfigService.get(param.getUserVipConfigId());
-        if (userVipConfig == null || !userVipConfig.getStatus()){
-            throw new BusinessException(UserErrorCodeEnum.VIP_CONFIG_NOT_EXIST.getCode(),UserErrorCodeEnum.VIP_CONFIG_NOT_EXIST.getMsg());
-
+        if (null == userVipConfig || !userVipConfig.getStatus()) {
+            throw new BusinessException(UserErrorCodeEnum.VIP_CONFIG_NOT_EXISTS.getCode(), UserErrorCodeEnum.VIP_CONFIG_NOT_EXISTS.getMsg());
         }
 
         ResponseData<ApplyBuyVipVO> responseData = (ResponseData<ApplyBuyVipVO>) ResponseData.success();
@@ -179,13 +168,13 @@ public class UserAccountServer {
         applyBusinessOrderParam.setTotalMoney(userVipConfig.getVipPrice());
         applyBusinessOrderParam.setPayMoney(userVipConfig.getVipPrice());
 
-        //  生成业务订单
+//      生成业务订单
         BusinessOrder businessOrder = null;
         try {
             businessOrder = businessOrderServer.applyBusinessOrder(applyBusinessOrderParam);
         } catch (BusinessException e) {
-            //抛异常说明订单已存在
-            if (e.getCode() == OrderErrorCodeEnum.INIT_EXIST_ERROR.getCode()){
+            // 业务订单已存在
+            if (e.getCode() == OrderErrorCodeEnum.INIT_ORDER_EXISTS.getCode()) {
                 responseData.setCode(e.getCode());
                 responseData.setMsg(e.getMessage());
                 businessOrder = (BusinessOrder) e.getData();
@@ -195,38 +184,36 @@ public class UserAccountServer {
                 return responseData;
             }
         }
-        if (null == businessOrder){
-            throw new BusinessException(OrderErrorCodeEnum.APPLY_ORDER_ERROR.getCode(),OrderErrorCodeEnum.APPLY_ORDER_ERROR.getMsg());
+
+        if (null == businessOrder) {
+            throw new BusinessException(OrderErrorCodeEnum.APPLY_ORDER_ERROR.getCode(), OrderErrorCodeEnum.APPLY_ORDER_ERROR.getMsg());
         }
 
-        //  生成购买会员订单
-        userVipRecordService.appBuyVip(userInfo.getUserId(),businessOrder.getBusinessOrderSn(),userVipConfig.getVipName(),
-                userVipConfig.getVipPrice(),userVipConfig.getVipIcon(),userVipConfig.getVipDays(),userVipConfig.getVipDaysName(),
-                userVipConfig.getVipLevel(),businessOrder.getPayMoney());
+//     生成购买会员订单
+        userVipRecordService.applyBuyVip(userInfo.getUserId(), businessOrder.getBusinessOrderSn(), userVipConfig.getVipName(),
+                userVipConfig.getVipPrice(), userVipConfig.getVipIcon(), userVipConfig.getVipDays(),
+                userVipConfig.getVipDaysName(), userVipConfig.getVipLevel(), businessOrder.getPayMoney());
 
-        //  返回订单编号
+//     返回订单编号
         ApplyBuyVipVO vo = new ApplyBuyVipVO();
         vo.setBusinessOrderSn(businessOrder.getBusinessOrderSn());
         responseData.setData(vo);
         return responseData;
-
     }
-
 
     /**
      * 创建支付订单
      */
-    public ApplyPayBuyVipVO applyPayBuyVip(ApplyPayBuyVipParam param){
-
+    public ApplyPayBuyVipVO applyPayBuyVip(ApplyPayBuyVipParam param) {
         ApplyPayBuyVipVO vo = new ApplyPayBuyVipVO();
+        vo.setPayType(param.getPayType());
         PayOrderParam payOrderParam = new PayOrderParam();
         payOrderParam.setBusinessOrderSn(param.getBusinessOrderSn());
-        //按支付类型创建支付订单
-        switch (param.getPayType()){
+        // 按支付类型创建支付订单
+        switch (param.getPayType()) {
             case WX_PAY:
                 ApplyWxOrderVO applyWxOrderVO = businessOrderServer.applyWxPay(payOrderParam);
                 vo.setApplyWxOrderVO(applyWxOrderVO);
-                vo.setPayTypeEnum(param.getPayType());
                 break;
             case ALI_PAY:
                 ApplyAliOrderVO applyAliOrderVO = businessOrderServer.applyAliPay(payOrderParam);
@@ -237,35 +224,32 @@ public class UserAccountServer {
         return vo;
     }
 
-
     /**
-     * 购买VIP成功
-     * @param param
+     * 购买vip成功
      */
-    public void buyVipSuccess(OrderSnParam param){
-
-        //校验购买记录状态,如果不是INIT,就结束
-        UserVipRecord userVipRecord = userVipRecordService.getByBusinessOrderSn(param.getBusinessOrderSn());
-        if (userVipRecord == null){
-            log.error("buyVipSuccess error, userVipRecord not exist ,businessOrderSn:{}",param.getBusinessOrderSn());
+    @Transactional
+    public void buyVipSuccess(OrderSnParam param) {
+        // 校验购买记录状态，如果购买记录状态不是INIT，就结束
+        UserVipRecord userVipRecord = userVipRecordService.getByBusinessOrderSn(param.getOrderSn());
+        if (null == userVipRecord) {
+            log.error("buyVipSuccess error, userVipRecord not exists, businessOrderSn:{}", param.getOrderSn());
+            // 飞书预警
             return;
         }
 
-        if (userVipRecord.getStatus().equals(UserVipRecordStatusEnum.INIT)){
-            log.error("buyVipSuccess error, userVipRecord status not INIT,businessOrderSn:{} status:{}",param.getBusinessOrderSn(),userVipRecord.getStatus());
+        if (!userVipRecord.getStatus().equals(UserVipRecordStatusEnum.INIT.name())) {
+            log.error("buyVipSuccess error, userVipRecord status error, businessOrderSn:{} status:{}", param.getOrderSn(), userVipRecord.getStatus());
             return;
         }
 
-        // 更新会员购买记录,在 UserVipRecordService 中
-        if (!userVipRecordService.paySuccess(param.getBusinessOrderSn())){
-            //如果没有更新成功,发送飞书预警
-            log.error("businessOrder paySuccess error, businessOrderSn:{}",param.getBusinessOrderSn());
+        // 更新会员购买记录状态（幂等）
+        if (!userVipRecordService.paySuccess(param.getOrderSn())) {
+            log.error("userVipRecord paySuccess error, businessOrderSn:{}", param.getOrderSn());
+            // 发送飞书预警
             return;
         }
 
-        //激活用户会员
+        // 激活用户会员
         userVipService.activateUserVip(userVipRecord);
-
     }
-
 }

@@ -10,5 +10,4 @@ import java.util.List;
 public class UserVipSortParam extends BaseParam {
     @NotNull
     private List<Long> ids;
-
 }

@@ -11,13 +11,13 @@ import lombok.Data;
  */
 @Data
 public class ApplyPayBuyVipVO extends BaseVO {
-
-
-
-    private PayTypeEnum payTypeEnum;
+    private PayTypeEnum payType;
     /**
      * 微信支付返回值
      */
     private ApplyWxOrderVO applyWxOrderVO;
+    /**
+     * 支付宝返回值
+     */
     private ApplyAliOrderVO applyAliOrderVO;
 }

@@ -6,8 +6,7 @@
  */
 package com.taoge.biz.persistent.service;
 
-
-import com.taoge.biz.common.utils.PasswordUtils;
+import com.taoge.biz.common.util.PasswordUtil;
 import com.taoge.biz.persistent.dao.UserBaseMapper;
 import com.taoge.biz.persistent.entity.UserBase;
 import com.taoge.framework.service.BaseService;
@@ -39,9 +38,9 @@ public class UserBaseService extends BaseService<UserBase, UserBaseMapper> {
         UserBase userBase = new UserBase();
         userBase.setUsername(username);
         // 生成salt方法
-        String salt = PasswordUtils.generateSalt();
+        String salt = PasswordUtil.generateSalt();
         // 密码需要加密，抽取加密方法 md5(password + salt)
-        password = PasswordUtils.encryptionPassword(password, salt);
+        password = PasswordUtil.encryptionPassword(password, salt);
         userBase.setPassword(password);
         userBase.setSalt(salt);
         userBase.setMobile(mobile);

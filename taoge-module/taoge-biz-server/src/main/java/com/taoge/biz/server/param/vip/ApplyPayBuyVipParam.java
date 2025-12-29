@@ -11,6 +11,4 @@ public class ApplyPayBuyVipParam extends BaseParam {
     private String businessOrderSn;
     @NotNull
     private PayTypeEnum payType;
-
-
 }

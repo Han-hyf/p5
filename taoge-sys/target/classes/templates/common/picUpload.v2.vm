@@ -1,0 +1,169 @@
+<link href="/static/css/globle.css" rel="stylesheet" />
+<style>
+.form-group.form-group-upload-img{
+    clear:both;
+    overflow: hidden;
+}
+.form-group.form-group-upload-img>*{
+    float:left;
+}
+</style>
+<script src="/static/webupload/jquery.sortable.v2.js"></script>
+<script type="text/x-tmpl" id="tmpl-upload-image">
+<ul class="upload-ul <!--=data.isSingle?'clearfix':'imgBox'-->">
+    <li class="upload-pick">
+        <div class="webuploader-container clearfix">
+            <div class="webuploader-pick webuploader-pick-hover"></div>
+            <div style="position: absolute; top: 0px; left: 0px; width: 120px; height: 90px; overflow: hidden; bottom: auto; right: auto;">
+            <!--if(data.isSingle){-->
+                <input type="file" name="file" class="webuploader-element-invisible" accept="">
+            <!--}else{-->
+                <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="">
+            <!--}-->
+            </div>
+        </div>
+    </li>
+</ul>
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        var inputId = 1;
+        function imgUpload(option) {
+            var _this = $(this);
+            _this.options = $.extend({
+                isSingle: true,
+                isread:false,
+                callback:function(){}
+            }, option);
+            _this.setSort = function(){
+                if(_this.options.isread) return;
+                _this.find(".imgBox").sortable({items: "li:not(.upload-pick)",callback:_this.options.callback});
+            }
+            _this.html($.tmpl($("#tmpl-upload-image").html(), {isSingle:_this.options.isSingle,isread:_this.options.isread}));
+            if(!_this.options.isSingle) {
+                _this.setSort();
+            }
+            var input = _this.find('input[type="file"]'),id = _createInputId();
+            input.attr('id',id);
+            $(document).on('change','#'+id,function(){
+                _this.uploadImg(option.isSingle?0:1);
+            })
+            if(!_this.options.isread){
+                _this.on('click','li .diyCancel',function(e){
+                    _this.removePic($(this));
+                });
+                _this.removePic = function(ele) {
+                    $(ele).parents(".diyUploadHover").remove();
+                    _this.options.callback();
+                }
+            }else{
+                _this.find('.upload-pick').hide();
+                setTimeout(function(){
+                    _this.find('.diyControl').remove()
+                },200)
+            }
+            _this.uploadImg = function(type) {
+                var $content = _this;
+                var input = $content.find('input[type="file"]');
+                var fileId = input.attr('id')
+                // 校验上传文件类型
+                var suffixList = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+                var suffixArr = input.val().split(".");
+                var suffix = suffixArr[suffixArr.length - 1].toLowerCase();
+                var suffixFlag = false;
+                for (var i = 0; i < suffixList.length; i++) {
+                    if (suffix == suffixList[i]) {
+                        suffixFlag = true;
+                        break;
+                    }
+                }
+                if (!suffixFlag) {
+                    $.alert("只能上传格式为:jpeg, jpg, png, gif, bmp的图片")
+                    return;
+                }
+                upload(fileId, _this.uploadCallBack, $.extend({type : type, element : $content,fileId:fileId}, _this.options));
+            }
+            _this.reviewImgs = function(){
+                // 回显图片
+                $(_this.options.source).each(function(i,url){
+                    if (url) {
+                        _this.addImg(url);
+                    }
+                })
+            }
+            _this.addImg = function(url){
+                var index = _this.find("li").length;
+                if(!_this.options.isSingle){
+                    _this.find(".upload-pick").before(imgDome(url));
+                    _this.setSort();
+                }else{
+                    _this.find('li').eq(0).find('.upImgUrl').attr("src",url);
+                    if(index < 2){
+                        _this.find("li.upload-pick").before(imgDome(url));
+                    }else{
+                    }
+                }
+            }
+            _this.uploadCallBack = function(data,option) {
+                document.getElementById(option.fileId).value='';
+                if (data.code != 200) {
+                    $.alert(data.msg);
+                    return;
+                }
+                _this.addImg(data.data);
+                if (option.callback) {
+                    option.callback()
+                }
+            }
+            if(_this.options.source&&_this.options.source.length){
+                _this.reviewImgs();
+            }
+        };
+        function _createInputId(){
+            return 'pic-upload-input-id-'+(inputId++);
+        }
+        function imgDome(url) {
+            //type 0是单图 1是多图
+            var o_li= '<li class="diyUploadHover">'+
+                    '<div class="viewThumb">'+
+                    '<input type="hidden" name="">'+
+                    '<p class="diyControl">'+
+                    '<span class="diyCancel"><i></i></span>'+
+                    '</p>'+
+                    '<img class="upImgUrl" src="'+url+'">'+
+                    '</div>'+
+                    '</li>';
+            return o_li;
+        }
+        $.fn.imgUpload = imgUpload;
+    })
+    // 图片路径组合--提交之前调用
+    function getPicPathJson(elememt) {
+        var imgArr=[],imgUrl,imgObj,picPathObj;
+        $("#"+elememt).find(".imgBox li:not(.upload-pick)").each(function (index) {
+            imgUrl = $(this).find("img.upImgUrl").attr("src");
+            imgObj = {imgPath:imgUrl};
+            imgArr.push(imgObj)
+        })
+        return picPathObj = JSON.stringify({picPath:imgArr});
+    }
+
+    /**
+     获取图片地址数组
+     @Param element 容器id
+     */
+    function getPicPathArray(elememt) {
+        var imgArr=[];
+        var ele;
+        if(typeof(elememt)=='string'){
+            ele = $("#"+elememt);
+        }else{
+            ele = elememt;
+        }
+        ele.find(".imgBox li:not(.upload-pick)").each(function (index) {
+            imgArr.push($(this).find("img.upImgUrl").attr("src"))
+        })
+        return imgArr;
+    }
+</script>

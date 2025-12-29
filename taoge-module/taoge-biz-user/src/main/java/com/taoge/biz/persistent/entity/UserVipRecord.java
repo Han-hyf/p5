@@ -2,7 +2,7 @@
  * @ClassName UserVipRecord
  * @Description 
  * @version 1.0
- * @Date 2025-11-10 14:03:16
+ * @Date 2023-11-07 20:17:12
  */
 package com.taoge.biz.persistent.entity;
 

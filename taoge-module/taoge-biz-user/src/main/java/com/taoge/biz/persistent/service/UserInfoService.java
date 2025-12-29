@@ -9,6 +9,7 @@ package com.taoge.biz.persistent.service;
 import com.taoge.biz.persistent.dao.UserInfoMapper;
 import com.taoge.biz.persistent.entity.UserInfo;
 import com.taoge.framework.service.BaseService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -31,6 +32,5 @@ public class UserInfoService extends BaseService<UserInfo, UserInfoMapper> {
     public int updateUserInfo(Long userId, String nickname, Integer gender, Date birthday) {
         return getMapper().updateUserInfo(userId, nickname, gender, birthday);
     }
-
 
 }

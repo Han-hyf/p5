@@ -129,6 +129,13 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
+    <update id="sort">
+        <foreach collection="ids" item="id" index="index" separator=";">
+            update `user_vip_config`
+            set sort = #{index}
+            where id = #{id}
+        </foreach>
+    </update>
 
     <select id="list" resultMap="BaseResultMap" >
         select 
@@ -136,8 +143,9 @@
         from `user_vip_config`
         where 1 = 1
         <if test="status != null" >
-            `status` = #{status},
+            and `status` = #{status}
         </if>
+        order by sort, create_time desc
     </select>
 
     <select id="count" resultType="java.lang.Long" >
@@ -154,14 +162,4 @@
             #{id}
         </foreach>
     </select>
-
-    <update id="sort">
-        <foreach collection="ids" item="id" index="index" separator=";">
-            update `user_vip_config`
-            set sort = #{index}
-            where id = #{id}
-        </foreach>
-    </update>
-
-
 </mapper>

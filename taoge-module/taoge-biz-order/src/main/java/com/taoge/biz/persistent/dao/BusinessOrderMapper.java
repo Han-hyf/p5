@@ -2,7 +2,7 @@
  * @ClassName BusinessOrderMapper
  * @Description 
  * @version 1.0
- * @Date 2025-11-10 14:03:16
+ * @Date 2023-11-07 20:17:12
  */
 package com.taoge.biz.persistent.dao;
 
@@ -20,14 +20,14 @@ public interface BusinessOrderMapper {
     int deleteByPrimaryKey(Long id);
 
     @Insert({
-        "insert into `business_order` (business_order_sn, user_id, ",
+        "insert into `business_order` (business_order_no, user_id, ",
         "sign_key, total_money, ",
         "pay_money, pay_type, ",
         "business_type, business_param, ",
         "`status`, pay_time, ",
         "pay_expire_time, create_time, ",
         "update_time)",
-        "values (#{businessOrderSn,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, ",
+        "values (#{businessOrderNo,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, ",
         "#{signKey,jdbcType=VARCHAR}, #{totalMoney,jdbcType=DECIMAL}, ",
         "#{payMoney,jdbcType=DECIMAL}, #{payType,jdbcType=VARCHAR}, ",
         "#{businessType,jdbcType=VARCHAR}, #{businessParam,jdbcType=VARCHAR}, ",
@@ -42,7 +42,7 @@ public interface BusinessOrderMapper {
 
     @Select({
         "select",
-        "id, business_order_sn, user_id, sign_key, total_money, pay_money, pay_type, ",
+        "id, business_order_no, user_id, sign_key, total_money, pay_money, pay_type, ",
         "business_type, business_param, `status`, pay_time, pay_expire_time, create_time, ",
         "update_time",
         "from `business_order`",
@@ -55,7 +55,7 @@ public interface BusinessOrderMapper {
 
     @Update({
         "update `business_order`",
-        "set business_order_sn = #{businessOrderSn,jdbcType=VARCHAR},",
+        "set business_order_no = #{businessOrderNo,jdbcType=VARCHAR},",
           "user_id = #{userId,jdbcType=BIGINT},",
           "sign_key = #{signKey,jdbcType=VARCHAR},",
           "total_money = #{totalMoney,jdbcType=DECIMAL},",
@@ -78,9 +78,9 @@ public interface BusinessOrderMapper {
 
     List<BusinessOrder> selectByIds(List<?> list);
 
-    BusinessOrder getInitOrderBySignKey(@Param("signKey")String signKey);
+    BusinessOrder getInitOrderBySignKey(@Param("signKey") String signKey);
 
-    BusinessOrder getInitOrderByBusinessOrderSn(@Param("businessSn")String businessSn);
+    BusinessOrder getByBusinessOrderSn(@Param("businessOrderSn") String businessOrderSn);
 
     int paySuccess(@Param("businessOrderSn") String businessOrderSn);
 }

@@ -14,10 +14,8 @@ import javax.annotation.Resource;
 
 @RestController
 public class ArticleCategorySaveController extends BaseController<ArticleCategorySaveParam> {
-
     @Resource
     ArticleServer articleServer;
-
 
     @Override
     @PostMapping("/api/articleCategory/save")

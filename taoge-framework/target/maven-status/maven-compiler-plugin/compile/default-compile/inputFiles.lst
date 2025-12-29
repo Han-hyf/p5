@@ -12,8 +12,10 @@ C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\frame
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\UUIDUtil.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\interceptor\BusinessWebConfig.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\interceptor\LoggerMDCFilter.java
+C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\SysUserContext.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\BeanMapUtil.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\exception\TokenException.java
+C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\interceptor\ApiInterceptor.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\crypto\Digests.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\annotation\PrimaryKey.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\AESUtil.java
@@ -23,8 +25,11 @@ C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\frame
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\annotation\Date.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\exception\BaseException.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\exception\BusinessException.java
+C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\interceptor\CmsInterceptor.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\annotation\BankCode.java
+C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\interceptor\SysInterceptor.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\controller\BaseControllerAdvice.java
+C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\common\MerchantInfo.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\ApplicationContextUtil.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\controller\BaseRequest.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\RequestId.java
@@ -33,7 +38,9 @@ C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\frame
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\exception\DatabaseException.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\exception\resolver\BusinessExceptionResolver.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\service\BaseService.java
+C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\MerchantContext.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\annotation\Range.java
+C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\common\SysUserInfo.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\annotation\JsonResultData.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\util\CookieUtil.java
 C:\Users\h\Desktop\p5\基础框架\taoge-framework\src\main\java\com\taoge\framework\controller\PageParam.java

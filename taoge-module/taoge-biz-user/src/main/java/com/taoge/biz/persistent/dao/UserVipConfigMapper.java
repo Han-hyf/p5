@@ -2,7 +2,7 @@
  * @ClassName UserVipConfigMapper
  * @Description 
  * @version 1.0
- * @Date 2025-11-06 17:52:35
+ * @Date 2023-11-06 21:28:21
  */
 package com.taoge.biz.persistent.dao;
 
@@ -28,7 +28,7 @@ public interface UserVipConfigMapper {
         "values (#{vipName,jdbcType=VARCHAR}, #{vipPrice,jdbcType=DECIMAL}, ",
         "#{vipIcon,jdbcType=VARCHAR}, #{vipDays,jdbcType=INTEGER}, ",
         "#{vipDaysName,jdbcType=VARCHAR}, #{vipLevel,jdbcType=INTEGER}, ",
-        "#{status,jdbcType=BIT}, #{sort,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, ",
+        "#{status,jdbcType=BIT}, #{sort,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, ",
         "#{updateTime,jdbcType=TIMESTAMP})"
     })
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Long.class)
@@ -57,7 +57,7 @@ public interface UserVipConfigMapper {
           "vip_days_name = #{vipDaysName,jdbcType=VARCHAR},",
           "vip_level = #{vipLevel,jdbcType=INTEGER},",
           "`status` = #{status,jdbcType=BIT},",
-          "sort = #{sort,jdbcType=BIGINT},",
+          "sort = #{sort,jdbcType=INTEGER},",
           "create_time = #{createTime,jdbcType=TIMESTAMP},",
           "update_time = #{updateTime,jdbcType=TIMESTAMP}",
         "where id = #{id,jdbcType=BIGINT}"
@@ -69,7 +69,6 @@ public interface UserVipConfigMapper {
     Long count(HashMap<String, ?> map);
 
     List<UserVipConfig> selectByIds(List<?> list);
-
 
     int sort(@Param("ids") List<Long> ids);
 }

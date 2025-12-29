@@ -1,6 +1,7 @@
 com\taoge\framework\util\crypto\AESUtil.class
 com\taoge\framework\exception\BaseException.class
 com\taoge\framework\constantsEnum\TokenTypeEnum.class
+com\taoge\framework\common\MerchantInfo.class
 com\taoge\framework\util\UUIDUtil.class
 com\taoge\framework\interceptor\ParamRequestWrapper$1.class
 com\taoge\framework\common\UserInfo.class
@@ -17,8 +18,10 @@ com\taoge\framework\annotation\NotNull.class
 com\taoge\framework\util\Utils.class
 com\taoge\framework\exception\BusinessException.class
 com\taoge\framework\annotation\UserName.class
+com\taoge\framework\interceptor\ApiInterceptor.class
 com\taoge\framework\interceptor\LoggerMDCFilter.class
 com\taoge\framework\annotation\Date.class
+com\taoge\framework\interceptor\CmsInterceptor.class
 com\taoge\framework\common\ErrorCode.class
 com\taoge\framework\common\StringEditor.class
 com\taoge\framework\exception\resolver\BusinessExceptionResolver.class
@@ -26,6 +29,7 @@ com\taoge\framework\util\ServiceUtil.class
 com\taoge\framework\util\crypto\Cryptos.class
 com\taoge\framework\controller\PageParam.class
 com\taoge\framework\annotation\Password.class
+com\taoge\framework\util\SysUserContext.class
 com\taoge\framework\annotation\Email.class
 com\taoge\framework\annotation\Number.class
 com\taoge\framework\common\GlobalConstants.class
@@ -57,12 +61,14 @@ com\taoge\framework\controller\BaseController.class
 com\taoge\framework\util\CookieUtil.class
 com\taoge\framework\annotation\ID.class
 com\taoge\framework\annotation\IdCard.class
+com\taoge\framework\common\SysUserInfo.class
 com\taoge\framework\util\SnowFlake.class
 com\taoge\framework\controller\BaseVO.class
 com\taoge\framework\util\ParamValidateUtil.class
 com\taoge\framework\util\RequestId.class
 com\taoge\framework\util\GenerateServiceFileUtil$GenerateConfig.class
 com\taoge\framework\annotation\JsonResultData.class
+com\taoge\framework\interceptor\SysInterceptor.class
 com\taoge\framework\service\BaseService.class
 com\taoge\framework\util\AESUtil.class
 com\taoge\framework\util\ControllerUtil.class
@@ -70,6 +76,7 @@ com\taoge\framework\interceptor\MethodAspect.class
 com\taoge\framework\controller\BasePO.class
 com\taoge\framework\common\QueryEntity$QueryType.class
 com\taoge\framework\util\GenerateServiceFileUtil.class
+com\taoge\framework\util\MerchantContext.class
 com\taoge\framework\controller\BaseRequest.class
 com\taoge\framework\util\crypto\Digests.class
 com\taoge\framework\common\DateEditor.class

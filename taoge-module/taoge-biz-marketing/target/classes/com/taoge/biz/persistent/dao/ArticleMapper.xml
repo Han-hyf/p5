@@ -176,7 +176,6 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-
     <select id="list" resultMap="ResultMapWithBLOBs" >
         select 
         <include refid="Base_Column_List" />
@@ -205,7 +204,7 @@
 
     <update id="publish">
         update `article`
-        set status = 'PUBLISH',publish_time = current_time()
+        set status = 'PUBLISH', publish_time = current_time ()
         where id = #{id} and status != 'PUBLISH'
     </update>
 

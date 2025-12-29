@@ -5,10 +5,12 @@ import com.taoge.framework.annotation.NotNull;
 import com.taoge.framework.controller.BaseParam;
 import lombok.Data;
 
+/**
+ * 发送短信验证码参数
+ */
 @Data
-public class SendSmsCodeParam  extends BaseParam {
-
-    @NotNull(errorMsg = "请输入用户Id")
+public class SendSmsCodeParam extends BaseParam {
+    @NotNull(errorMsg = "用户身份异常")
     private Long userId;
     @NotNull(errorMsg = "请输入手机号")
     private String originMobile;
@@ -18,9 +20,6 @@ public class SendSmsCodeParam  extends BaseParam {
     private String iso;
     @NotNull(errorMsg = "请选择业务类型")
     private SmsActionType actionType;
-    private String templateParam;
     @NotNull(errorMsg = "用户身份异常")
     private String ip;
-
-
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class WxPayNotifyParam extends BaseParam {
-
-    private String wxOrderSn;
     private String businessOrderSn;
+    private String wxOrderSn;
 }

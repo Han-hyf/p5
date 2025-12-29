@@ -7,7 +7,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Data
 public class MerchantShopTagEO extends BaseVO {
-
     @Field(type = FieldType.Keyword)
     private String tagName;
     @Field(type = FieldType.Keyword)

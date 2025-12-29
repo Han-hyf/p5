@@ -13,20 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-public class UserVipApplyPayController extends BaseController <UserVipApplyPayParam>{
-
+public class UserVipApplyPayController extends BaseController<UserVipApplyPayParam> {
     @Resource
     UserAccountServer userAccountServer;
 
     @Override
     @PostMapping("/api/user/vip/applyPay")
     public ResponseData<?> execute(@RequestBody UserVipApplyPayParam param) {
-
         ApplyPayBuyVipParam applyPayBuyVipParam = new ApplyPayBuyVipParam();
         applyPayBuyVipParam.setBusinessOrderSn(param.getBusinessOrderSn());
         applyPayBuyVipParam.setPayType(PayTypeEnum.getByPayType(param.getPayType()));
         ApplyPayBuyVipVO vo = userAccountServer.applyPayBuyVip(applyPayBuyVipParam);
-        return ResponseData.success("",vo);
-
+        return ResponseData.success("", vo);
     }
 }

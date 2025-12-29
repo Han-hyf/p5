@@ -11,14 +11,12 @@ import javax.annotation.Resource;
 
 @RestController
 public class ArticleCategoryAllController extends BaseController {
-
     @Resource
     ArticleServer articleServer;
-
 
     @Override
     @PostMapping("/api/articleCategory/all")
     public ResponseData<?> execute(BaseParam param) {
-        return ResponseData.success("",articleServer.allArticleCategory());
+        return ResponseData.success("", articleServer.allArticleCategory());
     }
 }

@@ -159,7 +159,6 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-
     <select id="list" resultMap="BaseResultMap" >
         select 
         <include refid="Base_Column_List" />
@@ -182,28 +181,26 @@
         </foreach>
     </select>
 
-    <select id="getInitOrderBySignKey" resultMap="BaseResultMap" >
+    <select id="getInitOrderBySignKey" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from `business_order`
         where sign_key = #{signKey}
         and status = 'INIT'
     </select>
-    <select id="getInitOrderByBusinessOrderSn" resultMap="BaseResultMap">
+
+    <select id="getByBusinessOrderSn" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from `business_order`
-        where business_order_sn = #{businessSn}
-        and status = 'INIT'
+        where business_order_sn = #{businessOrderSn}
     </select>
 
     <update id="paySuccess">
         update `business_order`
-        set status = 'paid'
+        set status = 'PAID'
         where business_order_sn = #{businessOrderSn}
-        and status = 'INIT'
+        and status  = 'INIT'
     </update>
-
-
 
 </mapper>

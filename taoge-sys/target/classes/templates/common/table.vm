@@ -1,0 +1,62 @@
+<!-- 表格 -->
+<script type="text/x-tmpl" id="tmpl-common-table">
+<table class="table">
+    <thead>
+    <tr>
+    <!--=renderTmpl('tmpl-common-table-head',data.options.head)-->
+    </tr>
+    </thead>
+    <tbody>
+        <!--=renderTmpl('tmpl-common-table-tr',{list:data.list,head:data.options.head})-->
+    </tbody>
+</table>
+</script>
+<!-- 标题 -->
+<script type="text/x-tmpl" id="tmpl-common-table-head">
+<!--for(var i=0;i<data.length;i++){-->
+    <th width="<!--=data[i].width-->"><!--=data[i].label--></th>
+<!--}-->
+</script>
+
+<!--行-->
+<script type="text/x-tmpl" id="tmpl-common-table-tr">
+<!--for(var i=0;i<data.list.length;i++){-->
+    <tr data-isenable="<!--=data.list[i].isenable-->">
+        <!--=renderTmpl('tmpl-common-table-tb',{data:data.list[i],head:data.head})-->
+    </tr>
+<!--}-->
+</script>
+
+<!-- 单元格 data.list[i][data.head[i].key]     值：data.data[data.head[i].key]-->
+<script type="text/x-tmpl" id="tmpl-common-table-tb">
+<!--for(var i=0;i<data.head.length;i++){-->
+    <td width="<!--=data.head[i].width-->">
+        <!--if(data.head[i].type=='img'){-->
+                <img src="<!--=data.data[data.head[i].key]-->" width="100">
+        <!--}else if(data.head[i].type=='embed'){-->
+                <!--=renderTmpl(data.head[i].tempId,Object.assign(data.head[i].headData,{value:data.data[data.head[i].key]}))-->
+        <!--}else if(data.head[i].type=='uploadImg'){-->
+            <!--=renderTmpl('tmpl-table-input-uploadImage-v2',{name:data.head[i].key,src:data.data[data.head[i].key]})-->
+        <!--}else{-->
+            <!--=data.data[data.head[i].key]-->
+        <!--}-->
+    </td>
+<!--}-->
+</script>
+<!-- onchange -->
+<script type="text/x-tmpl" id="tmpl-table-input-uploadImage-v2">
+<input type="file" data-name="<!--=data.name-->" name="file" id="<!--='btn-upload-img-'+getRandomCode()-->" style="display: inline; width: 75px;">
+<img style="display: <!--=data.src?'block':'none'-->;" width="100" src="<!--=data.src||''-->" />
+</script>
+<script type="text/javascript">
+    function renderTmpl(id,data){
+      return $.tmpl($("#"+id).html(),data);
+    }
+    $(function(){
+        if($.fn.rendeTable) return;
+        $.fn.rendeTable = function(data,options){
+            var dom = $.tmpl($("#tmpl-common-table").html(),{list:data,options:options});
+            $(this).html(dom);
+        }
+    })
+</script>

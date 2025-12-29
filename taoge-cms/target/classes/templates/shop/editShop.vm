@@ -1,0 +1,63 @@
+<#assign yqTitle = "修改密码">
+<#include "/common/header.vm" />
+<div class="container-fluid">
+    <div class="panel panel-default admin-panel-full">
+        <div class="panel-heading">修改密码</div>
+        <div class="panel-body">
+            <form id="dataForm" action="" class="form-horizontal admin-form">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">新密码</label>
+                    <div class="col-sm-6">
+                        <input id="password" maxlength="20" name="password" type="password" class="form-control">
+                    </div>
+                    <div class="col-sm-3">
+                        <div id="passwordMsg"  user="alert" class="alert alert-success hidden"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">确认密码</label>
+                    <div class="col-sm-6">
+                        <input id="confirmPwd" maxlength="20" name="confirmPwd" type="password" class="form-control">
+                    </div>
+                    <div class="col-sm-3">
+                        <div id="confirmPwdMsg" user="alert" class="alert alert-success hidden"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">操作</label>
+                    <div class="col-sm-6">
+                        <button id="saveBtn" onclick="saveForm()" type="button" class="btn btn-primary">修改</button>
+                        <button id="cancelBtn" onclick="goBack()" type="button" class="btn btn-secondary">取消</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $("#password").bind("keypress", function(){
+            $("#passwordMsg").addClass("hidden");
+        });
+        $("#confirmPwd").bind("keypress", function(){
+            $("#confirmPwdMsg").addClass("hidden");
+        });
+    });
+    function saveForm() {
+        if($.trim($("#password").val()) == '') {
+            $.alert("请输入密码");
+            return ;
+        }else if($("#password").val() != $("#confirmPwd").val()) {
+            $.alert("两次密码不一致");
+            return ;
+        }
+        ajax("/api/merchant/resetPwd", $("#dataForm").getFormParam(), function (data) {
+            if (data.code == 200) {
+                $.alert("操作成功");
+            } else {
+                $.alert("修改成功", {}, goBack);
+            }
+        });
+    }
+</script>
+<#include "/common/footer.vm">

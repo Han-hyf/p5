@@ -2,7 +2,7 @@
  * @ClassName UserVipMapper
  * @Description 
  * @version 1.0
- * @Date 2025-11-06 17:52:35
+ * @Date 2023-11-06 21:28:21
  */
 package com.taoge.biz.persistent.dao;
 
@@ -64,5 +64,5 @@ public interface UserVipMapper {
 
     List<UserVip> selectByIds(List<?> list);
 
-    UserVip getByUserId(Long userId);
+    UserVip getByUserId(@Param("userId") Long userId);
 }

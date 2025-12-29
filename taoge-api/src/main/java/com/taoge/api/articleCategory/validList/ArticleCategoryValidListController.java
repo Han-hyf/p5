@@ -11,14 +11,12 @@ import javax.annotation.Resource;
 
 @RestController
 public class ArticleCategoryValidListController extends BaseController {
-
     @Resource
     ArticleServer articleServer;
-
 
     @Override
     @PostMapping("/api/articleCategory/validList")
     public ResponseData<?> execute(BaseParam param) {
-        return ResponseData.success("",articleServer.validArticleCategoryList());
+        return ResponseData.success("", articleServer.validArticleCategoryList());
     }
 }

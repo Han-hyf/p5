@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Data
 public class ArticleDetailVO extends BaseVO {
-
     private Long id;
     private Long category1Id;
     private Long category2Id;
@@ -21,5 +20,6 @@ public class ArticleDetailVO extends BaseVO {
     private String authorName;
     private String content;
 
-    private ArticleStatisticsVO articleStatisticsVO;
+    // 统计数据
+    private ArticleStatisticsVO articleStatistics;
 }

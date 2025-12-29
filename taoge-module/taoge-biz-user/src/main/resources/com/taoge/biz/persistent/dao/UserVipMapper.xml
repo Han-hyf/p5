@@ -119,7 +119,8 @@
             #{id}
         </foreach>
     </select>
-    <select id="getByUserId" resultType="com.taoge.biz.persistent.entity.UserVip">
+
+    <select id="getByUserId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from `user_vip`
